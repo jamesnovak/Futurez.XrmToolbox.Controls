@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurez.XrmToolbox.Controls", "Futurez.XrmToolbox.Controls\Futurez.XrmToolbox.Controls.csproj", "{F4093354-8269-47A6-817C-2E84986412E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurez.XrmToolbox.TestPlugin", "Futurez.XrmToolbox.TestPlugin\Futurez.XrmToolbox.TestPlugin.csproj", "{21344404-C595-4DA3-8B50-AD8C9BA148AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4093354-8269-47A6-817C-2E84986412E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4093354-8269-47A6-817C-2E84986412E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4093354-8269-47A6-817C-2E84986412E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4093354-8269-47A6-817C-2E84986412E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21344404-C595-4DA3-8B50-AD8C9BA148AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21344404-C595-4DA3-8B50-AD8C9BA148AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21344404-C595-4DA3-8B50-AD8C9BA148AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21344404-C595-4DA3-8B50-AD8C9BA148AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F1423F90-FCA9-4D56-83A6-E219C49AC55C}
+	EndGlobalSection
+EndGlobal

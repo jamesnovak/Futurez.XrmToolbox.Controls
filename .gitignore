@@ -1,0 +1,6 @@
+packages/
+bin/
+obj/
+v15/
+nuget/
+.vs/Futurez.Xrm.XrmToolbox.Controls/DesignTimeBuild/.dtbcache

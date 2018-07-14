@@ -5,11 +5,17 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
     public class CrmActions
     {
-        public static List<EntityMetadata> GetAllEntities(IOrganizationService service, ConfigurationInfo config)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static List<EntityMetadata> RetrieveAllEntities(IOrganizationService service, ConfigurationInfo config)
         {
             // retrieve all entities (just entity metadata)
             var req = new RetrieveAllEntitiesRequest()
@@ -25,6 +31,13 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             return entities;
         }
 
+        /// <summary>
+        /// Retrieve Entity Attribute Metadata
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="config"></param>
+        /// <param name="logicalName"></param>
+        /// <returns></returns>
         public static EntityMetadata RetrieveEntityAttributeMeta(IOrganizationService service, ConfigurationInfo config, string logicalName)
         {
             // Retrieve the attribute metadata

@@ -7,7 +7,7 @@ using Microsoft.Xrm.Sdk;
 using XrmToolBox.Extensibility;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
     public partial class EntitiesListControl : UserControl, IXrmToolboxControl
     {
@@ -27,7 +27,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         public event EventHandler InitializeComplete;
 
         /// <summary>
-        /// Event that fires when LoadData() completes
+        /// Event that fires when <see cref="LoadData"/>() completes
         /// </summary>
         [Category("XrmToolbox")]
         [Description("Event that fires when LoadData() completes")]
@@ -68,12 +68,22 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         [Description("Event that fires when the list of Checked Items changes")]
         public event EventHandler FilterEntitiesListComplete;
 
+        /// <summary>
+        /// Event Arguments for the Selected Item Changed event that provides the new Selected EntityMetadata object
+        /// </summary>
         public class SelectedItemChangedEventArgs : EventArgs
         {
-            private readonly EntityMetadata _entity = null;
-            public EntityMetadata Entity { get => _entity; }
-            public SelectedItemChangedEventArgs(EntityMetadata entity) {
-                _entity = entity;
+            /// <summary>
+            /// The new Selected EntityMetadata object
+            /// </summary>
+            public EntityMetadata Entity { get; } = null;
+
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="entity"></param>
+            internal SelectedItemChangedEventArgs(EntityMetadata entity) {
+                Entity = entity;
             }
         }
         #endregion
@@ -81,6 +91,9 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         #region Public properties
 
         #region Options
+        /// <summary>
+        /// Display additional column details or Name and Entity Logical Name only
+        /// </summary>
         [DisplayName("Column Display Mode")]
         [Description("Display additional column details or Name and Entity Logical Name only")]
         [Category("XrmToolbox")]
@@ -93,8 +106,38 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             }
         }
 
+        /// <summary>
+        /// Flag indicating whether to display Checkboxes in the ListView control
+        /// </summary>
+        [DisplayName("Display Checkboxes")]
+        [Description("Flag indicating whether to display Checkboxes in the ListView control")]
+        [Category("XrmToolbox")]
+        public bool Checkboxes
+        {
+            get { return ListViewEntities.CheckBoxes; }
+            set {
+                // uncheck everything if no checkboxes
+                if (value == false) {
+                    CheckAllNone(false);
+                }
+                _performingBulkSelection = true;
+                ListViewEntities.SuspendLayout();
+
+                ListViewEntities.CheckBoxes = value;
+
+                toolLinkCheckAll.Enabled = ListViewEntities.CheckBoxes;
+                toolLinkCheckNone.Enabled = ListViewEntities.CheckBoxes;
+
+                ListViewEntities.ResumeLayout();
+                _performingBulkSelection = false;
+            }
+        }
+
+        /// <summary>
+        /// Defines which Entity types should be loaded on retrieve.
+        /// </summary>
         [DisplayName("Entity Types")]
-        [Description("Which Entity types should be loaded on retrieve.")]
+        [Description("Defines which Entity types should be loaded on retrieve.")]
         [Category("XrmToolbox")]
         public EnumEntityTypes EntityTypes
         {
@@ -102,6 +145,9 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             set { _config.EntityTypes = value; }
         }
 
+        /// <summary>
+        /// List of Entities to excluded upon retrieval.
+        /// </summary>
         [DisplayName("Entity Filters")]
         [Description("List of Entities to excluded upon retrieval.")]
         [Category("XrmToolbox")]
@@ -112,6 +158,9 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             internal set {  _config.EntityFilters = value; }
         }
 
+        /// <summary>
+        /// Flag indicating whether to retrieve the metadata that has not been published
+        /// </summary>
         [DisplayName("Retrieve As If Published")]
         [Description("Flag indicating whether to retrieve the metadata that has not been published")]
         [Category("XrmToolbox")]
@@ -121,8 +170,9 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             set { _config.RetrieveAsIfPublished = value; }
         }
 
-        private bool _groupByType = true;
-
+        /// <summary>
+        /// Flag indicating whether to group the Entities by System or Custom type
+        /// </summary>
         [DisplayName("Group By Type")]
         [Description("Flag indicating whether to group the Entities by System or Custom type")]
         [Category("XrmToolbox")]
@@ -135,6 +185,9 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             }
         }
 
+        /// <summary>
+        /// Toggle the display of the toolbar within the control
+        /// </summary>
         [DisplayName("Display Toolbar")]
         [Description("Toggle the display of the toolbar within the control")]
         [Category("XrmToolbox")]
@@ -148,18 +201,27 @@ namespace Futurez.Xrm.XrmToolbox.Controls
 
         #region Runtime Properties
 
+        /// <summary>
+        /// List of all checked EntityMetadata objects in the ListView
+        /// </summary>
         [DisplayName("Checked Entities List")]
         [Description("List of all Entities that are checked in the control.")]
         [Category("XrmToolbox")]
         [Browsable(false)]
         public List<EntityMetadata> CheckedEntities { get; private set; } = null;
 
+        /// <summary>
+        /// The currently selected EntityMetadata object in the ListView
+        /// </summary>
         [DisplayName("Selected Entity")]
         [Description("The Entity that is currently selected the control.")]
         [Category("XrmToolbox")]
         [Browsable(false)]
         public EntityMetadata SelectedEntity { get; private set; } = null;
 
+        /// <summary>
+        /// List of all loaded EntityMetadata objects for the current connection
+        /// </summary>
         [DisplayName("All Entities List")]
         [Description("List of all Entities that have been loaded.")]
         [Category("XrmToolbox")]
@@ -169,14 +231,18 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         #endregion
 
         #region Private items
-        private PluginControlBase _parent;
-        private IOrganizationService _service;
+        private PluginControlBase _parent = null;
+        private IOrganizationService _service = null;
         private List<ListViewItem> _entitiesListViewItemsColl = null;
         private bool _performingBulkSelection = false; // let's keep the listview from flickering and crashing
-        
+
+        private bool _groupByType = true;
         private ConfigurationInfo _config = null;
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public EntitiesListControl()
         {
             InitializeComponent();
@@ -185,11 +251,23 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             _config = new ConfigurationInfo();
             ToggleMainControlsEnabled(false);
         }
+        #region Public methods
+
 
         #region IXrmToolboxControl
 
+        /// <summary>
+        /// Initialize the control with the parent XrmToolbox control and the active Organization Service
+        /// </summary>
+        /// <param name="parent">Reference to the containing XrmToolbox control</param>
+        /// <param name="service">reference to the active IOrganizationService</param>
+        /// <exception cref="InvalidOperationException">Will be thrown if the Initialize has not been called.</exception>
         public void Initialize(PluginControlBase parent, IOrganizationService service)
         {
+            if ((service == null) || (parent == null)) {
+                throw new InvalidOperationException("Both parent and service must be provided.");
+            }
+
             // set up some vars
             _parent = parent;
             _service = service;
@@ -202,6 +280,9 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             InitializeComplete?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Close the control and release all resources
+        /// </summary>
         public void Close()
         {
             _parent = null;
@@ -213,7 +294,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         }
 
         /// <summary>
-        /// Clear out the saved entities list and update the UI accordingly
+        /// Clear out the saved entities list and update the ListView
         /// </summary>
         public void ClearData()
         {
@@ -222,17 +303,22 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             CheckedEntities = new List<EntityMetadata>();
             AllEntities = new List<EntityMetadata>();
 
-            listViewEntities.Items.Clear();
+            ListViewEntities.Items.Clear();
 
             ClearDataComplete?.Invoke(this, new EventArgs());
         }
 
-
         /// <summary>
-        /// Load the data for this control... We want entities!
+        /// Load the Entities using the current IOrganizationService.
+        /// The call is asynchronous and will leverage the WorkAsync object on the parent XrmToolbox control
         /// </summary>
+        /// <exception cref="InvalidOperationException">Will be thrown if the Initialize has not been called.</exception>
         public void LoadData()
         {
+            if ((_service == null) || (_parent == null)) {
+                throw new InvalidOperationException("Initialize must be called before loading the list of Entities.");
+            }
+
             ToggleMainControlsEnabled(false);
 
             // first clear out all data currently loaded
@@ -253,7 +339,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
 
                         var config = e.Argument as ConfigurationInfo;
 
-                        e.Result = CrmActions.GetAllEntities(_service, config);
+                        e.Result = CrmActions.RetrieveAllEntities(_service, config);
 
                         w.ReportProgress(100, "Loading Entities from CRM Complete!");
                     }
@@ -273,10 +359,12 @@ namespace Futurez.Xrm.XrmToolbox.Controls
                 }
             });
         }
+
         /// <summary>
-        /// Update the active connection for the control
+        /// Update the active connection and IOrganizationService reference for the control
+        /// This will clear the current list of EntityMetadata objects in the ListView.
         /// </summary>
-        /// <param name="newService"></param>
+        /// <param name="newService">New active instance of the IOrganizationService</param>
         public void UpdateConnection(IOrganizationService newService)
         {
             _service = newService;
@@ -288,12 +376,42 @@ namespace Futurez.Xrm.XrmToolbox.Controls
 
         #endregion
 
+        /// <summary>
+        /// Filter the entities list against the provided string 
+        /// </summary>
+        public void FilterEntitiesList(string filterText)
+        {
+            toolStripTextFilter.Text = filterText;
+        }
+
+        /// <summary>
+        /// Check all items in the ListView
+        /// </summary>
+        public void CheckAll()
+        {
+            CheckAllNone(true);
+        }
+
+        /// <summary>
+        /// Uncheck all items in the ListView
+        /// </summary>
+        public void CheckNone()
+        {
+            CheckAllNone(false);
+        }
+        #endregion
+
         #region Events
+        /// <summary>
+        /// Event handler definition for the LoadEntitiesComplete change event
+        /// </summary>
+        /// <param name="entites">List of all loaded EntityMetadata objects</param>
+        private delegate void LoadEntitiesCompleteDelegate(List<EntityMetadata> entites);
 
-        public delegate void EntitySelectedDelegate(List<EntityMetadata> entity);
-
-        public delegate void LoadEntitiesCompleteDelegate(List<EntityMetadata> entites);
-
+        /// <summary>
+        /// Method to handle the Load Data Complete event
+        /// </summary>
+        /// <param name="entities"></param>
         private void LoadEntitiesComplete(List<EntityMetadata> entities)
         {
             AllEntities = new List<EntityMetadata>();
@@ -335,10 +453,10 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         /// </summary>
         private void PopulateListView()
         {
-            listViewEntities.Items.Clear();
-            listViewEntities.Refresh();
+            ListViewEntities.Items.Clear();
+            ListViewEntities.Refresh();
 
-            listViewEntities.SuspendLayout();
+            ListViewEntities.SuspendLayout();
 
             // persist the list of list view items for the filtering
             _entitiesListViewItemsColl = new List<ListViewItem>();
@@ -361,7 +479,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
                         StateImageIndex = 0,
                         Text = displayName,
                         Tag = entity,  // stash the template here so we can view details later
-                        Group = (GroupByType) ? listViewEntities.Groups[entityType] : null
+                        Group = (GroupByType) ? ListViewEntities.Groups[entityType] : null
                     };
                     lvItem.SubItems.Add(new ListViewItem.ListViewSubItem(lvItem, entity.SchemaName) { Tag = "SchemaName", Name = "Schema Name" });
 
@@ -377,15 +495,19 @@ namespace Futurez.Xrm.XrmToolbox.Controls
                     // add to the internal collection of ListView Items and the external list
                     _entitiesListViewItemsColl.Add(lvItem);
                 }
-                listViewEntities.Items.AddRange(_entitiesListViewItemsColl.ToArray<ListViewItem>());
+                ListViewEntities.Items.AddRange(_entitiesListViewItemsColl.ToArray<ListViewItem>());
             }
 
-            listViewEntities.ResumeLayout();
+            ListViewEntities.ResumeLayout();
         }
 
+
+        /// <summary>
+        /// Set up the list view columns based on the ColumnDisplayMode and Groups options
+        /// </summary>
         private void SetUpListViewColumns() {
 
-            var cols = listViewEntities.Columns;
+            var cols = ListViewEntities.Columns;
             if (ColumnDisplayMode == ListViewColumnDisplayMode.Compact)
             {
                 if (cols.Contains(colDescription))
@@ -405,7 +527,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
                     cols.Add(colDescription);
             }
 
-            var groups = listViewEntities.Groups;
+            var groups = ListViewEntities.Groups;
             if (GroupByType)
             {
                 var listViewGroup1 = new ListViewGroup("System", System.Windows.Forms.HorizontalAlignment.Left) { Header = "System", Name = "System", Tag = "System" };
@@ -422,16 +544,31 @@ namespace Futurez.Xrm.XrmToolbox.Controls
 
         #region UI event handlers
 
+        /// <summary>
+        /// Handle the filter text changed event.  Apply current filter text to the ListView
+        /// </summary>
+        /// <param name="sender">event sender object</param>
+        /// <param name="e">event args object</param>
         private void ToolStripTextFilter_TextChanged(object sender, EventArgs e)
         {
             FilterEntitiesList();
         }
 
+        /// <summary>
+        /// Hanlde the LoadEntites tool button click and load all entities from the connected instance
+        /// </summary>
+        /// <param name="sender">event sender object</param>
+        /// <param name="e">event args object</param>
         private void ToolButtonLoadEntities_Click(object sender, EventArgs e)
         {
             LoadData();
         }
 
+        /// <summary>
+        /// Handle the ListView Item Checked event and set the selected list of items
+        /// </summary>
+        /// <param name="sender">event sender object</param>
+        /// <param name="e">event args object</param>
         private void ListViewEntities_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
             if (!_performingBulkSelection)
@@ -439,7 +576,12 @@ namespace Futurez.Xrm.XrmToolbox.Controls
                 UpdateSelectedItemsList();
             }
         }
- 
+
+        /// <summary>
+        /// Handle the item selection change for the list view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListViewEntities_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             // clear current selection 
@@ -453,6 +595,11 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             SelectedItemChanged?.Invoke(this, new SelectedItemChangedEventArgs(SelectedEntity));
         }
 
+        /// <summary>
+        /// Handle the column click for the list view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListViewEntities_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             SortEntitiesList(e.Column);
@@ -467,6 +614,26 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         {
             CheckAllNone(true);
         }
+
+        /// <summary>
+        /// Handle keyboard select all / none
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListViewEntities_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!e.Handled)
+            {
+                if (e.Control) {
+                    if (e.KeyCode == Keys.A) {
+                        CheckAllNone(true);
+                    }
+                    else if (e.KeyCode == Keys.D) {
+                        CheckAllNone(false);
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Private helper methods
@@ -477,7 +644,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         /// <param name="enabled"></param>
         private void ToggleMainControlsEnabled(bool enabled)
         {
-            listViewEntities.Enabled = enabled;
+            ListViewEntities.Enabled = enabled;
             toolStripMain.Enabled = enabled;
             toolButtonLoadEntities.Enabled = enabled;
             toolLinkCheckAll.Enabled = enabled;
@@ -485,39 +652,42 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             toolStripTextFilter.Enabled = enabled;
         }
 
+        /// <summary>
+        /// Sort the current list of Entities in the ListView
+        /// </summary>
         private void SortEntitiesList()
         {
             var currCol = 0;
-            int.TryParse(listViewEntities.Tag.ToString(), out currCol);
+            int.TryParse(ListViewEntities.Tag.ToString(), out currCol);
             SortEntitiesList(currCol);
         }
 
         /// <summary>
-        /// Handle the sorting on each column,using the sort provider
+        /// Sort the current list of Entities in the ListView
         /// </summary>
-        /// <param name="column"></param>
+        /// <param name="column">ListView column index to be sorted</param>
         private void SortEntitiesList(int column)
         {
             _performingBulkSelection = true;
 
-            listViewEntities.SuspendLayout();
+            ListViewEntities.SuspendLayout();
 
-            if (column == int.Parse(listViewEntities.Tag.ToString()))
+            if (column == int.Parse(ListViewEntities.Tag.ToString()))
             {
-                listViewEntities.Sorting = ((this.listViewEntities.Sorting == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending);
-                listViewEntities.ListViewItemSorter = new ListViewItemComparer(column, listViewEntities.Sorting);
+                ListViewEntities.Sorting = ((this.ListViewEntities.Sorting == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending);
+                ListViewEntities.ListViewItemSorter = new ListViewItemComparer(column, ListViewEntities.Sorting);
                 return;
             }
-            listViewEntities.Tag = column;
-            listViewEntities.ListViewItemSorter = new ListViewItemComparer(column, SortOrder.Ascending);
+            ListViewEntities.Tag = column;
+            ListViewEntities.ListViewItemSorter = new ListViewItemComparer(column, SortOrder.Ascending);
 
             _performingBulkSelection = false;
 
-            listViewEntities.ResumeLayout();
+            ListViewEntities.ResumeLayout();
         }
 
         /// <summary>
-        /// Update the list of selected items based on the list of Checked items in the list view
+        /// Update the list of selected items based on the list of Checked items in the ListView
         /// </summary>
         private void UpdateSelectedItemsList()
         {
@@ -530,12 +700,12 @@ namespace Futurez.Xrm.XrmToolbox.Controls
                 CheckedEntities = new List<EntityMetadata>();
             }
 
-            if (listViewEntities.CheckedItems.Count == 0) {
+            if (ListViewEntities.CheckedItems.Count == 0) {
                 CheckedEntities.Clear();
             }
             else
             {
-                foreach (ListViewItem item in listViewEntities.Items)
+                foreach (ListViewItem item in ListViewEntities.Items)
                 {
                     var entity = (EntityMetadata)item.Tag;
                     if (item.Checked)
@@ -561,39 +731,32 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         /// <summary>
         /// Toggle all or none checked in the main list view
         /// </summary>
-        /// <param name="checkAll"></param>
+        /// <param name="checkAll">flag indicating whether to check all items in the ListView</param>
         private void CheckAllNone(bool checkAll)
         {
             _performingBulkSelection = true;
 
-            listViewEntities.SuspendLayout();
+            ListViewEntities.SuspendLayout();
 
-            if (checkAll)
+            // if check all and we have checkboxes enabled, then do some work
+            if (checkAll && Checkboxes)
             {
-                foreach (ListViewItem item in listViewEntities.Items) {
+                foreach (ListViewItem item in ListViewEntities.Items) {
                     item.Checked = true;
                 }
             }
             else
             {
-                foreach (ListViewItem item in listViewEntities.CheckedItems) {
+                foreach (ListViewItem item in ListViewEntities.CheckedItems) {
                     item.Checked = false;
                 }
             }
-            listViewEntities.ResumeLayout();
+            ListViewEntities.ResumeLayout();
 
             _performingBulkSelection = false;
 
             // now that we have an updated list view, udpate the list of selected items
             UpdateSelectedItemsList();
-        }
-
-        /// <summary>
-        /// Filter the entities list against the provided string 
-        /// </summary>
-        public void FilterEntitiesList(string filterText)
-        {
-            toolStripTextFilter.Text = filterText;
         }
 
         /// <summary>
@@ -605,7 +768,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
 
             _performingBulkSelection = true;
 
-            listViewEntities.SuspendLayout();
+            ListViewEntities.SuspendLayout();
 
             // 
             if (filterText.Length > 0)
@@ -616,14 +779,14 @@ namespace Futurez.Xrm.XrmToolbox.Controls
                                 i.SubItems["Name"].Text.ToLower().Contains(filterText)
                     );
                 // for some reason, on filter, the group gets lost
-                listViewEntities.Items.Clear();
-                listViewEntities.Items.AddRange(filteredList.ToArray<ListViewItem>());
+                ListViewEntities.Items.Clear();
+                ListViewEntities.Items.AddRange(filteredList.ToArray<ListViewItem>());
             }
             else
             {
                 // clear filter, add all items back
-                listViewEntities.Items.Clear();
-                listViewEntities.Items.AddRange(_entitiesListViewItemsColl.ToArray<ListViewItem>());
+                ListViewEntities.Items.Clear();
+                ListViewEntities.Items.AddRange(_entitiesListViewItemsColl.ToArray<ListViewItem>());
             }
 
             // for some reason, on filter, the group gets lost
@@ -634,7 +797,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             // now that we have an updated list view, udpate the list of selected items
             UpdateSelectedItemsList();
 
-            listViewEntities.ResumeLayout();
+            ListViewEntities.ResumeLayout();
 
             FilterEntitiesListComplete?.Invoke(this, new EventArgs());
         }
@@ -650,7 +813,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             {
                 var entity = item.Tag as EntityMetadata;
                 var entityType = (entity.IsCustomEntity.Value) ? "Custom" : "System";
-                item.Group = listViewEntities.Groups[entityType];
+                item.Group = ListViewEntities.Groups[entityType];
             }
         }
         #endregion

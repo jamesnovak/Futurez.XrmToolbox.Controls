@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
     partial class ControlTesterPluginControl
     {
@@ -36,7 +36,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.EntitiesListControl = new Futurez.Xrm.XrmToolbox.Controls.EntitiesListControl();
+            this.EntitiesListControl = new Futurez.XrmToolbox.Controls.EntitiesListControl();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
             this.labelMessage = new System.Windows.Forms.Label();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
@@ -104,10 +104,11 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             // 
             // EntitiesListControl
             // 
-            this.EntitiesListControl.ColumnDisplayMode = Futurez.Xrm.XrmToolbox.Controls.ListViewColumnDisplayMode.Compact;
+            this.EntitiesListControl.Checkboxes = true;
+            this.EntitiesListControl.ColumnDisplayMode = Futurez.XrmToolbox.Controls.ListViewColumnDisplayMode.Compact;
             this.EntitiesListControl.DisplayToolbar = false;
             this.EntitiesListControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EntitiesListControl.EntityTypes = Futurez.Xrm.XrmToolbox.Controls.EnumEntityTypes.BothCustomAndSystem;
+            this.EntitiesListControl.EntityTypes = Futurez.XrmToolbox.Controls.EnumEntityTypes.BothCustomAndSystem;
             this.EntitiesListControl.GroupByType = true;
             this.EntitiesListControl.Location = new System.Drawing.Point(3, 33);
             this.EntitiesListControl.Name = "EntitiesListControl";
@@ -120,7 +121,7 @@ namespace Futurez.Xrm.XrmToolbox.Controls
             this.EntitiesListControl.LoadDataComplete += new System.EventHandler(this.EntitiesListControl1_LoadDataComplete);
             this.EntitiesListControl.ClearDataComplete += new System.EventHandler(this.EntitiesListControl1_ClearDataComplete);
             this.EntitiesListControl.CloseComplete += new System.EventHandler(this.EntitiesListControl1_CloseComplete);
-            this.EntitiesListControl.SelectedItemChanged += new System.EventHandler<Futurez.Xrm.XrmToolbox.Controls.EntitiesListControl.SelectedItemChangedEventArgs>(this.EntitiesListControl1_SelectedItemChanged);
+            this.EntitiesListControl.SelectedItemChanged += new System.EventHandler<Futurez.XrmToolbox.Controls.EntitiesListControl.SelectedItemChangedEventArgs>(this.EntitiesListControl1_SelectedItemChanged);
             this.EntitiesListControl.CheckedItemsChanged += new System.EventHandler(this.EntitiesListControl1_CheckedItemsChanged);
             // 
             // textBoxEventLog

@@ -1,4 +1,4 @@
-﻿namespace Futurez.Xrm.XrmToolbox.Controls
+﻿namespace Futurez.XrmToolbox.Controls
 {
     partial class EntitiesListControl
     {
@@ -31,7 +31,7 @@
             System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("System", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Custom", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntitiesListControl));
-            this.listViewEntities = new System.Windows.Forms.ListView();
+            this.ListViewEntities = new System.Windows.Forms.ListView();
             this.colDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colSchemaName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -49,38 +49,39 @@
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listViewEntities
+            // ListViewEntities
             // 
-            this.listViewEntities.CheckBoxes = true;
-            this.listViewEntities.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ListViewEntities.CheckBoxes = true;
+            this.ListViewEntities.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colDisplayName,
             this.colName,
             this.colSchemaName,
             this.colState,
             this.colDescription});
-            this.listViewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewEntities.FullRowSelect = true;
+            this.ListViewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListViewEntities.FullRowSelect = true;
             listViewGroup1.Header = "System";
             listViewGroup1.Name = "System";
             listViewGroup1.Tag = "System";
             listViewGroup2.Header = "Custom";
             listViewGroup2.Name = "Custom";
             listViewGroup2.Tag = "Custom";
-            this.listViewEntities.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            this.ListViewEntities.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup1,
             listViewGroup2});
-            this.listViewEntities.HideSelection = false;
-            this.listViewEntities.Location = new System.Drawing.Point(0, 25);
-            this.listViewEntities.MultiSelect = false;
-            this.listViewEntities.Name = "listViewEntities";
-            this.listViewEntities.Size = new System.Drawing.Size(840, 542);
-            this.listViewEntities.TabIndex = 1;
-            this.listViewEntities.Tag = "0";
-            this.listViewEntities.UseCompatibleStateImageBehavior = false;
-            this.listViewEntities.View = System.Windows.Forms.View.Details;
-            this.listViewEntities.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListViewEntities_ColumnClick);
-            this.listViewEntities.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.ListViewEntities_ItemChecked);
-            this.listViewEntities.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewEntities_ItemSelectionChanged);
+            this.ListViewEntities.HideSelection = false;
+            this.ListViewEntities.Location = new System.Drawing.Point(0, 25);
+            this.ListViewEntities.MultiSelect = false;
+            this.ListViewEntities.Name = "ListViewEntities";
+            this.ListViewEntities.Size = new System.Drawing.Size(840, 542);
+            this.ListViewEntities.TabIndex = 1;
+            this.ListViewEntities.Tag = "0";
+            this.ListViewEntities.UseCompatibleStateImageBehavior = false;
+            this.ListViewEntities.View = System.Windows.Forms.View.Details;
+            this.ListViewEntities.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListViewEntities_ColumnClick);
+            this.ListViewEntities.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.ListViewEntities_ItemChecked);
+            this.ListViewEntities.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewEntities_ItemSelectionChanged);
+            this.ListViewEntities.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewEntities_KeyUp);
             // 
             // colDisplayName
             // 
@@ -201,7 +202,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.listViewEntities);
+            this.Controls.Add(this.ListViewEntities);
             this.Controls.Add(this.toolStripMain);
             this.Name = "EntitiesListControl";
             this.Size = new System.Drawing.Size(840, 567);
@@ -214,7 +215,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listViewEntities;
+        private System.Windows.Forms.ListView ListViewEntities;
         private System.Windows.Forms.ColumnHeader colDisplayName;
         private System.Windows.Forms.ColumnHeader colName;
         private System.Windows.Forms.ColumnHeader colSchemaName;

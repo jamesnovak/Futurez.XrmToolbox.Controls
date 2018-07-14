@@ -4,7 +4,7 @@ using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
     /// <summary>
     /// Helper class that will display the Open File Dialog in the Property Grid
@@ -12,10 +12,22 @@ namespace Futurez.Xrm.XrmToolbox.Controls
     /// </summary>
     public class OpenFileNameEditor : UITypeEditor
     {
+        /// <summary>
+        /// Specify the Edit Style for the Property 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
             return UITypeEditorEditStyle.Modal;
         }
 
+        /// <summary>
+        /// Override for the EditValue method for the Property control
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="provider"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (context == null || context.Instance == null || provider == null) {

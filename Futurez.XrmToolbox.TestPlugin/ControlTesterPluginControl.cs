@@ -3,8 +3,9 @@ using System.ComponentModel;
 using XrmToolBox.Extensibility;
 using Microsoft.Xrm.Sdk;
 using McTools.Xrm.Connection;
+using System.Windows;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
     public partial class ControlTesterPluginControl : PluginControlBase
     {
@@ -18,16 +19,27 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         {
             ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("https://github.com/MscrmTools/XrmToolBox"));
 
+            // try and load before initialize. should blow up!
+            // EntitiesListControl.LoadData();
+
+            // initialize the user control with the connection and parent reference
             EntitiesListControl.Initialize(this, Service);
 
-            EntitiesListControl.EntityFilters
-                .Add(new FilterInfo() {
+            // apply some Entity Filters.  Do not load entities from the futz_ publisher.
+            EntitiesListControl.EntityFilters.Add(new FilterInfo() {
                         FilterMatchType = EnumFilterMatchType.StartsWith,
-                        FilterString = "gnext_"
+                        FilterString = "futz_"
                     });
-            propertyGrid1.SelectedObject = EntitiesListControl.EntityFilters;
 
-            EntitiesListControl.LoadData();
+            checkBoxGridProps.Checked = true;
+
+            // propertyGrid1.SelectedObject = EntitiesListControl.EntityFilters;
+
+            // automatically load the data?
+            if (MessageBox.Show("Would you like to automatically load the Entities?", "Load Entities", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                EntitiesListControl.LoadData();
+            }
         }
 
         private void tsbClose_Click(object sender, EventArgs e)

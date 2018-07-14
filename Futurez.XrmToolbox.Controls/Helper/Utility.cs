@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
     internal class Utility
     {

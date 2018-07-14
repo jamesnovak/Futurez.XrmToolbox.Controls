@@ -1,4 +1,4 @@
-﻿namespace Futurez.Xrm.XrmToolbox.Controls
+﻿namespace Futurez.XrmToolbox.Controls
 {
     public class Constants
     {

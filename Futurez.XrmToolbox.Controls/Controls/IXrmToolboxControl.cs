@@ -4,8 +4,11 @@ using Microsoft.Xrm.Sdk;
 
 using XrmToolBox.Extensibility;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
+    /// <summary>
+    /// General interface for XrmToolbox helper controls
+    /// </summary>
     interface IXrmToolboxControl
     {
         event EventHandler InitializeComplete;

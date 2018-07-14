@@ -4,8 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Futurez.Xrm.XrmToolbox.Controls
+namespace Futurez.XrmToolbox.Controls
 {
+    #region Enums
+    /// <summary>
+    /// Logging level for general actions in the code
+    /// </summary>
     [Serializable]
     public enum EnumLoggingLevel
     {
@@ -14,6 +18,10 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         Information,
         Verbose
     }
+
+    /// <summary>
+    /// Types of Entities that should be retrieved
+    /// </summary>
     [Serializable]
     public enum EnumEntityTypes
     {
@@ -21,12 +29,20 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         System,
         BothCustomAndSystem
     }
+
+    /// <summary>
+    /// Display mode for the List View control
+    /// </summary>
     [Serializable]
     public enum ListViewColumnDisplayMode
     {
         Expanded,
         Compact
     }
+
+    /// <summary>
+    /// Type of filter action to be applied for Filter Text
+    /// </summary>
     [Serializable]
     public enum EnumFilterMatchType
     {
@@ -36,7 +52,12 @@ namespace Futurez.Xrm.XrmToolbox.Controls
         EndsWith,
         RegEx
     }
+    #endregion
 
+
+    /// <summary>
+    /// Class that provides a method for capturing general filter criteria
+    /// </summary>
     [DisplayName("Filter Criteria")]
     [Category("Filter Settings")]
     [Description("Class containing information about exclusion filters")]
@@ -44,21 +65,34 @@ namespace Futurez.Xrm.XrmToolbox.Controls
     [Serializable]
     public class FilterInfo
     {
+        /// <summary>
+        /// Text that will be matched on the filter
+        /// </summary>
         [DisplayName("Filter Text")]
         [Description("Provide the filter text to be applied")]
         [Category("Filter Settings")]
         public string FilterString{ get; set; }
 
+        /// <summary>
+        /// The type of matching that should be performed.
+        /// </summary>
         [DisplayName("Filter Match")]
         [Description("Choose how this Filter String will be applied")]
         [Category("Filter Settings")]
         public EnumFilterMatchType FilterMatchType { get; set; }
 
+        /// <summary>
+        /// Helper method for formatting the display of the filter criteria
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() {
             return FilterMatchType.ToString() + ": " + FilterString;
         }
     }
 
+    /// <summary>
+    /// Helper class to capture general configuration settings
+    /// </summary>
     [Serializable]
     public class ConfigurationInfo
     {
@@ -133,28 +167,44 @@ namespace Futurez.Xrm.XrmToolbox.Controls
 
         #endregion
 
+
         #region Public properties
+        /// <summary>
+        /// Which Entity types should be loaded on retrieve.
+        /// </summary>
         [DisplayName("Entity Types")]
         [Description("Which Entity types should be loaded on retrieve.")]
         [Category("Filter Settings")]
         public EnumEntityTypes EntityTypes { get; set; }
 
+        /// <summary>
+        /// List of filters to be applied to Entity retrieval and generation. These are Entities that you want to be excluded from the list and not generated in the template.
+        /// </summary>
         [DisplayName("Entity Filters")]
         [Description("List of filters to be applied to Entity retrieval and generation. These are Entities that you want to be excluded from the list and not generated in the template.")]
         [Category("Filter Settings")]
         [ListBindable(BindableSupport.Yes)]
         public List<FilterInfo> EntityFilters { get; set; }
 
+        /// <summary>
+        /// Flag indicating whether to retrieve the metadata that has not been published
+        /// </summary>
         [DisplayName("Retrieve As If Published")]
         [Description("Flag indicating whether to retrieve the metadata that has not been published")]
         [Category("Project Settings")]
         public bool RetrieveAsIfPublished { get; set; }
 
+        /// <summary>
+        /// Display additional column details or Name and Entity Logical Name only
+        /// </summary>
         [DisplayName("Column Display Mode")]
         [Description("Display additional column details or Name and Entity Logical Name only")]
         [Category("Project Settings")]
         public ListViewColumnDisplayMode ColumnDisplayMode { get; set; }
-        
+
+        /// <summary>
+        /// Toggle to enable logging while generating the templates
+        /// </summary>
         [DisplayName("Logging Level")]
         [Description("Toggle to enable logging while generating the templates")]
         [Category("Project Settings")]

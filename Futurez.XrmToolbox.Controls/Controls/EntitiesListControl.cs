@@ -776,7 +776,7 @@ namespace Futurez.XrmToolbox.Controls
                 // filter the master list and bind it to the list view
                 var filteredList = _entitiesListViewItemsColl
                     .Where(i => i.Text.ToLower().Contains(filterText) ||
-                                i.SubItems["Name"].Text.ToLower().Contains(filterText)
+                                i.SubItems["Schema Name"].Text.ToLower().Contains(filterText)
                     );
                 // for some reason, on filter, the group gets lost
                 ListViewEntities.Items.Clear();

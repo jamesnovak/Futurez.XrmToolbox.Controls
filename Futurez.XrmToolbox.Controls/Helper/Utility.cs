@@ -9,6 +9,10 @@ namespace Futurez.XrmToolbox.Controls
 {
     internal class Utility
     {
+        /// <summary>
+        /// Get the folder for the currenty loaded Assemblu
+        /// </summary>
+        /// <returns></returns>
         public static string GetAssemblyFolder() {
             string codeBase = Assembly.GetExecutingAssembly().CodeBase;
 
@@ -25,6 +29,10 @@ namespace Futurez.XrmToolbox.Controls
             return Path.GetDirectoryName(path);
         }
 
+        /// <summary>
+        /// Create a settings folder for this plugin using the Assembly Name 
+        /// </summary>
+        /// <returns></returns>
         public static string GetToolSettingsFolder() {
             var path = Path.Combine(GetAssemblyFolder(), Assembly.GetExecutingAssembly().GetName().Name);
 

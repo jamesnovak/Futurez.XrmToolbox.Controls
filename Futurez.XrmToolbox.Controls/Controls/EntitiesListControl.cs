@@ -82,7 +82,8 @@ namespace Futurez.XrmToolbox.Controls
             /// Constructor
             /// </summary>
             /// <param name="entity"></param>
-            internal SelectedItemChangedEventArgs(EntityMetadata entity) {
+            internal SelectedItemChangedEventArgs(EntityMetadata entity)
+            {
                 Entity = entity;
             }
         }
@@ -100,7 +101,8 @@ namespace Futurez.XrmToolbox.Controls
         public ListViewColumnDisplayMode ColumnDisplayMode
         {
             get { return _config.ColumnDisplayMode; }
-            set { _config.ColumnDisplayMode = value;
+            set {
+                _config.ColumnDisplayMode = value;
                 // reset the list view with the new settings
                 PopulateListView();
             }
@@ -155,7 +157,19 @@ namespace Futurez.XrmToolbox.Controls
         public List<FilterInfo> EntityFilters
         {
             get { return _config.EntityFilters; }
-            internal set {  _config.EntityFilters = value; }
+            internal set { _config.EntityFilters = value; }
+        }
+
+        /// <summary>
+        /// List of EntityFilters to be applied on the 
+        /// </summary>
+        [DisplayName("Entity Request Filters")]
+        [Description("List of EntityFilters applied to Entity retrieval. This is the EntityFilter structure passed with the RetrieveAllEntitiesRequest")]
+        [Category("XrmToolbox")]
+        public List<EntityFilters> EntityRequestFilters
+        {
+            get { return _config.EntityRequestFilters; }
+            internal set { _config.EntityRequestFilters = value; }
         }
 
         /// <summary>
@@ -179,7 +193,8 @@ namespace Futurez.XrmToolbox.Controls
         public bool GroupByType
         {
             get { return _groupByType; }
-            set { _groupByType = value;
+            set {
+                _groupByType = value;
                 // reset the list view with the new settings
                 PopulateListView();
             }
@@ -197,6 +212,23 @@ namespace Futurez.XrmToolbox.Controls
             get { return toolStripMain.Visible; }
             set { toolStripMain.Visible = value; }
         }
+
+        /// <summary>
+        /// Filter string for the toolbar 
+        /// </summary>
+        [DisplayName("List Filter String")]
+        [Description("Filter string applied to the main ListView control for the loaded Entities List.")]
+        [Category("XrmToolbox")]
+        [Browsable(false)]
+        public string ListFilterString
+        {
+            get {
+                var filter = toolStripTextFilter.Text;
+                return (filter != null) ? filter.Trim() : filter;
+            }
+            internal set { toolStripTextFilter.Text = value; }
+        }
+
         #endregion
 
         #region Runtime Properties
@@ -324,17 +356,14 @@ namespace Futurez.XrmToolbox.Controls
             // first clear out all data currently loaded
             ClearData();
 
-            _parent.WorkAsync(new WorkAsyncInfo
-            {
+            _parent.WorkAsync(new WorkAsyncInfo {
                 Message = "Retrieving the list of Entities",
                 AsyncArgument = _config,
                 IsCancelable = true,
                 MessageWidth = 340,
                 MessageHeight = 150,
-                Work = (w, e) =>
-                {
-                    try
-                    {
+                Work = (w, e) => {
+                    try {
                         w.ReportProgress(0, "Loading Entities from CRM");
 
                         var config = e.Argument as ConfigurationInfo;
@@ -343,17 +372,14 @@ namespace Futurez.XrmToolbox.Controls
 
                         w.ReportProgress(100, "Loading Entities from CRM Complete!");
                     }
-                    catch (Exception ex)
-                    {
+                    catch (Exception ex) {
                         MessageBox.Show("An error occured attetmpting to load the list of Entities:\n" + ex.Message);
                     }
                 },
-                ProgressChanged = e =>
-                {
+                ProgressChanged = e => {
                     ProgressChanged?.Invoke(this, new ProgressChangedEventArgs(e.ProgressPercentage, e.UserState.ToString()));
                 },
-                PostWorkCallBack = e =>
-                {
+                PostWorkCallBack = e => {
                     // launch the results window... get off this worker thread so we can work with the dialog correctly
                     BeginInvoke(new LoadEntitiesCompleteDelegate(LoadEntitiesComplete), new object[] { e.Result as List<EntityMetadata> });
                 }
@@ -390,6 +416,35 @@ namespace Futurez.XrmToolbox.Controls
         public void CheckAll()
         {
             CheckAllNone(true);
+        }
+
+        /// <summary>
+        /// Check all items in the ListView
+        /// </summary>
+        public void CheckEntities(List<string> entityLogicalNames)
+        {
+            if (entityLogicalNames == null)
+                return;
+
+            _performingBulkSelection = true;
+
+            ListViewEntities.SuspendLayout();
+
+            // if the item is in the list, check it
+            foreach (ListViewItem item in ListViewEntities.Items) 
+            {
+                var ent = item.Tag as EntityMetadata;
+                if (entityLogicalNames.Contains(ent.LogicalName.ToLower()) && Checkboxes)
+                {
+                    item.Checked = true;
+                }
+            }
+            ListViewEntities.ResumeLayout();
+
+            _performingBulkSelection = false;
+
+            // now that we have an updated list view, udpate the list of selected items
+            UpdateSelectedItemsList();
         }
 
         /// <summary>
@@ -496,6 +551,7 @@ namespace Futurez.XrmToolbox.Controls
                     _entitiesListViewItemsColl.Add(lvItem);
                 }
                 ListViewEntities.Items.AddRange(_entitiesListViewItemsColl.ToArray<ListViewItem>());
+                ListViewEntities.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
 
             ListViewEntities.ResumeLayout();
@@ -672,14 +728,14 @@ namespace Futurez.XrmToolbox.Controls
 
             ListViewEntities.SuspendLayout();
 
-            if (column == int.Parse(ListViewEntities.Tag.ToString()))
-            {
+            if (column == int.Parse(ListViewEntities.Tag.ToString())) {
                 ListViewEntities.Sorting = ((this.ListViewEntities.Sorting == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending);
                 ListViewEntities.ListViewItemSorter = new ListViewItemComparer(column, ListViewEntities.Sorting);
-                return;
             }
-            ListViewEntities.Tag = column;
-            ListViewEntities.ListViewItemSorter = new ListViewItemComparer(column, SortOrder.Ascending);
+            else {
+                ListViewEntities.Tag = column;
+                ListViewEntities.ListViewItemSorter = new ListViewItemComparer(column, SortOrder.Ascending);
+            }
 
             _performingBulkSelection = false;
 
@@ -691,7 +747,6 @@ namespace Futurez.XrmToolbox.Controls
         /// </summary>
         private void UpdateSelectedItemsList()
         {
-
             if (_performingBulkSelection) {
                 return;
             }

@@ -36,11 +36,11 @@ namespace Futurez.XrmToolbox.Controls
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.EntitiesListControl = new Futurez.XrmToolbox.Controls.EntitiesListControl();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
             this.labelMessage = new System.Windows.Forms.Label();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.checkBoxGridProps = new System.Windows.Forms.CheckBox();
+            this.EntitiesListControl = new Futurez.XrmToolbox.Controls.EntitiesListControl();
             this.toolStripMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -102,28 +102,6 @@ namespace Futurez.XrmToolbox.Controls
             this.tableLayoutPanel1.Size = new System.Drawing.Size(987, 538);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
-            // EntitiesListControl
-            // 
-            this.EntitiesListControl.Checkboxes = true;
-            this.EntitiesListControl.ColumnDisplayMode = Futurez.XrmToolbox.Controls.ListViewColumnDisplayMode.Compact;
-            this.EntitiesListControl.DisplayToolbar = false;
-            this.EntitiesListControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EntitiesListControl.EntityTypes = Futurez.XrmToolbox.Controls.EnumEntityTypes.BothCustomAndSystem;
-            this.EntitiesListControl.GroupByType = true;
-            this.EntitiesListControl.Location = new System.Drawing.Point(3, 33);
-            this.EntitiesListControl.Name = "EntitiesListControl";
-            this.EntitiesListControl.Padding = new System.Windows.Forms.Padding(3);
-            this.EntitiesListControl.RetrieveAsIfPublished = true;
-            this.EntitiesListControl.Size = new System.Drawing.Size(487, 482);
-            this.EntitiesListControl.TabIndex = 12;
-            this.EntitiesListControl.ProgressChanged += new System.EventHandler<System.ComponentModel.ProgressChangedEventArgs>(this.EntitiesListControl1_ProgressChanged);
-            this.EntitiesListControl.InitializeComplete += new System.EventHandler(this.EntitiesListControl1_InitializeComplete);
-            this.EntitiesListControl.LoadDataComplete += new System.EventHandler(this.EntitiesListControl1_LoadDataComplete);
-            this.EntitiesListControl.ClearDataComplete += new System.EventHandler(this.EntitiesListControl1_ClearDataComplete);
-            this.EntitiesListControl.CloseComplete += new System.EventHandler(this.EntitiesListControl1_CloseComplete);
-            this.EntitiesListControl.SelectedItemChanged += new System.EventHandler<Futurez.XrmToolbox.Controls.EntitiesListControl.SelectedItemChangedEventArgs>(this.EntitiesListControl1_SelectedItemChanged);
-            this.EntitiesListControl.CheckedItemsChanged += new System.EventHandler(this.EntitiesListControl1_CheckedItemsChanged);
-            // 
             // textBoxEventLog
             // 
             this.textBoxEventLog.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -167,6 +145,28 @@ namespace Futurez.XrmToolbox.Controls
             this.checkBoxGridProps.Text = "Show Entities List Properties";
             this.checkBoxGridProps.UseVisualStyleBackColor = true;
             this.checkBoxGridProps.CheckedChanged += new System.EventHandler(this.checkBoxGridProps_CheckedChanged);
+            // 
+            // EntitiesListControl
+            // 
+            this.EntitiesListControl.Checkboxes = true;
+            this.EntitiesListControl.ColumnDisplayMode = Futurez.XrmToolbox.Controls.ListViewColumnDisplayMode.Compact;
+            this.EntitiesListControl.DisplayToolbar = false;
+            this.EntitiesListControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EntitiesListControl.EntityTypes = Futurez.XrmToolbox.Controls.EnumEntityTypes.BothCustomAndSystem;
+            this.EntitiesListControl.GroupByType = true;
+            this.EntitiesListControl.Location = new System.Drawing.Point(3, 33);
+            this.EntitiesListControl.Name = "EntitiesListControl";
+            this.EntitiesListControl.Padding = new System.Windows.Forms.Padding(3);
+            this.EntitiesListControl.RetrieveAsIfPublished = true;
+            this.EntitiesListControl.Size = new System.Drawing.Size(487, 482);
+            this.EntitiesListControl.TabIndex = 12;
+            this.EntitiesListControl.ProgressChanged += new System.EventHandler<System.ComponentModel.ProgressChangedEventArgs>(this.EntitiesListControl1_ProgressChanged);
+            this.EntitiesListControl.InitializeComplete += new System.EventHandler(this.EntitiesListControl1_InitializeComplete);
+            this.EntitiesListControl.LoadDataComplete += new System.EventHandler(this.EntitiesListControl1_LoadDataComplete);
+            this.EntitiesListControl.ClearDataComplete += new System.EventHandler(this.EntitiesListControl1_ClearDataComplete);
+            this.EntitiesListControl.CloseComplete += new System.EventHandler(this.EntitiesListControl1_CloseComplete);
+            this.EntitiesListControl.SelectedItemChanged += new System.EventHandler<Futurez.XrmToolbox.Controls.EntitiesListControl.SelectedItemChangedEventArgs>(this.EntitiesListControl1_SelectedItemChanged);
+            this.EntitiesListControl.CheckedItemsChanged += new System.EventHandler(this.EntitiesListControl1_CheckedItemsChanged);
             // 
             // ControlTesterPluginControl
             // 

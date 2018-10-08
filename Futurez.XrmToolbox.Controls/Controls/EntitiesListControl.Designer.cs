@@ -149,7 +149,7 @@
             // 
             this.toolLinkCheckAll.ActiveLinkColor = System.Drawing.SystemColors.HotTrack;
             this.toolLinkCheckAll.AutoSize = false;
-            this.toolLinkCheckAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolLinkCheckAll.Image = ((System.Drawing.Image)(resources.GetObject("toolLinkCheckAll.Image")));
             this.toolLinkCheckAll.IsLink = true;
             this.toolLinkCheckAll.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.toolLinkCheckAll.LinkColor = System.Drawing.SystemColors.HotTrack;
@@ -162,12 +162,12 @@
             // toolLinkCheckNone
             // 
             this.toolLinkCheckNone.ActiveLinkColor = System.Drawing.SystemColors.HotTrack;
-            this.toolLinkCheckNone.AutoSize = false;
+            this.toolLinkCheckNone.Image = ((System.Drawing.Image)(resources.GetObject("toolLinkCheckNone.Image")));
             this.toolLinkCheckNone.IsLink = true;
             this.toolLinkCheckNone.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.toolLinkCheckNone.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.toolLinkCheckNone.Name = "toolLinkCheckNone";
-            this.toolLinkCheckNone.Size = new System.Drawing.Size(75, 22);
+            this.toolLinkCheckNone.Size = new System.Drawing.Size(88, 22);
             this.toolLinkCheckNone.Text = "Check None";
             this.toolLinkCheckNone.ToolTipText = "Clear the checked items in the list of Entities";
             this.toolLinkCheckNone.Click += new System.EventHandler(this.ToolLinkCheckNone_Click);
@@ -179,10 +179,10 @@
             // 
             // toolStripLabelFilter
             // 
-            this.toolStripLabelFilter.AutoSize = false;
+            this.toolStripLabelFilter.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLabelFilter.Image")));
             this.toolStripLabelFilter.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
             this.toolStripLabelFilter.Name = "toolStripLabelFilter";
-            this.toolStripLabelFilter.Size = new System.Drawing.Size(40, 22);
+            this.toolStripLabelFilter.Size = new System.Drawing.Size(49, 22);
             this.toolStripLabelFilter.Text = "Filter";
             // 
             // toolStripTextFilter

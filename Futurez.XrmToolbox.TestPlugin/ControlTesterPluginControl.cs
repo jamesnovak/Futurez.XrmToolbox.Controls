@@ -4,6 +4,7 @@ using XrmToolBox.Extensibility;
 using Microsoft.Xrm.Sdk;
 using McTools.Xrm.Connection;
 using System.Windows;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace Futurez.XrmToolbox.Controls
 {
@@ -31,6 +32,7 @@ namespace Futurez.XrmToolbox.Controls
                         FilterString = "futz_"
                     });
 
+            EntitiesListControl.EntityRequestFilters.Add(EntityFilters.All);
             checkBoxGridProps.Checked = true;
 
             // propertyGrid1.SelectedObject = EntitiesListControl.EntityFilters;
@@ -124,9 +126,10 @@ namespace Futurez.XrmToolbox.Controls
                 propertyGrid1.SelectedObject = EntitiesListControl;
             }
             else {
-                propertyGrid1.SelectedObject = EntitiesListControl.SelectedEntity;
-            }
 
+                var entRef = EntitiesListControl.SelectedEntity as EntityMetadata;
+                propertyGrid1.SelectedObject = entRef;
+            }
         }
     }
 }

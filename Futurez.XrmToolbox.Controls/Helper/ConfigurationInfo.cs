@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -97,6 +98,9 @@ namespace Futurez.XrmToolbox.Controls
     public class ConfigurationInfo
     {
         #region Constructor 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ConfigurationInfo() {
 
             EntityFilters = new List<FilterInfo>() {
@@ -105,6 +109,8 @@ namespace Futurez.XrmToolbox.Controls
 
             EntityTypes = EnumEntityTypes.BothCustomAndSystem;
             RetrieveAsIfPublished = true;
+
+            EntityRequestFilters = new List<EntityFilters>() { Microsoft.Xrm.Sdk.Metadata.EntityFilters.Default };
         }
         #endregion
 
@@ -167,7 +173,6 @@ namespace Futurez.XrmToolbox.Controls
 
         #endregion
 
-
         #region Public properties
         /// <summary>
         /// Which Entity types should be loaded on retrieve.
@@ -181,10 +186,19 @@ namespace Futurez.XrmToolbox.Controls
         /// List of filters to be applied to Entity retrieval and generation. These are Entities that you want to be excluded from the list and not generated in the template.
         /// </summary>
         [DisplayName("Entity Filters")]
-        [Description("List of filters to be applied to Entity retrieval and generation. These are Entities that you want to be excluded from the list and not generated in the template.")]
+        [Description("List of filters to be applied to Entity retrieval. These are Entities that you want to be excluded from the list.")]
         [Category("Filter Settings")]
         [ListBindable(BindableSupport.Yes)]
         public List<FilterInfo> EntityFilters { get; set; }
+
+        /// <summary>
+        /// List of EntityFilters to be applied on the 
+        /// </summary>
+        [DisplayName("Entity Request Filters")]
+        [Description("List of EntityFilters to be applied to Entity retrieval. This is the EntityFilter structure passed with the RetrieveAllEntitiesRequest")]
+        [Category("Filter Settings")]
+        [ListBindable(BindableSupport.Yes)]
+        public List<EntityFilters> EntityRequestFilters { get; set; }
 
         /// <summary>
         /// Flag indicating whether to retrieve the metadata that has not been published

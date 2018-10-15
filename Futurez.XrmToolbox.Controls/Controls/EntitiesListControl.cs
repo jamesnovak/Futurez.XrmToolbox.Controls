@@ -229,6 +229,37 @@ namespace Futurez.XrmToolbox.Controls
             internal set { toolStripTextFilter.Text = value; }
         }
 
+        /// <summary>
+        /// Current SortOrder for the Entity List View
+        /// </summary>
+        [DisplayName("List Sort Order")]
+        [Description("Current SortOrder for the Entity List View.")]
+        [Category("XrmToolbox")]
+        [Browsable(false)]
+        public SortOrder ListSortOrder
+        {
+            get {
+                return ListViewEntities.Sorting;
+            }
+            internal set { ListViewEntities.Tag = value; }
+        }
+
+        /// <summary>
+        /// Current SortColumn index for the Entity List View
+        /// </summary>
+        [DisplayName("List Sort Column")]
+        [Description("Current Sort Column for the Entity List View.")]
+        [Category("XrmToolbox")]
+        [Browsable(false)]
+        public int ListSortColumn
+        {
+            get {
+                var currCol = 0;
+                int.TryParse(ListViewEntities.Tag.ToString(), out currCol);
+                return currCol;
+            }
+            internal set { ListViewEntities.Tag = value; }
+        }
         #endregion
 
         #region Runtime Properties
@@ -658,7 +689,7 @@ namespace Futurez.XrmToolbox.Controls
         /// <param name="e"></param>
         private void ListViewEntities_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            SortEntitiesList(e.Column);
+            SortList(e.Column);
         }
 
         private void ToolLinkCheckNone_Click(object sender, EventArgs e)
@@ -709,33 +740,46 @@ namespace Futurez.XrmToolbox.Controls
         }
 
         /// <summary>
+        /// External method to allow sorting of the Entities List
+        /// </summary>
+        /// <param name="sortColumn"></param>
+        /// <param name="sortorder"></param>
+        public void SortEntitiesList(int sortColumn, SortOrder sortorder)
+        {
+            SortList(sortColumn, sortorder);
+        }
+
+        /// <summary>
         /// Sort the current list of Entities in the ListView
         /// </summary>
         private void SortEntitiesList()
         {
-            var currCol = 0;
-            int.TryParse(ListViewEntities.Tag.ToString(), out currCol);
-            SortEntitiesList(currCol);
+            SortList(ListSortColumn);
         }
 
         /// <summary>
         /// Sort the current list of Entities in the ListView
         /// </summary>
         /// <param name="column">ListView column index to be sorted</param>
-        private void SortEntitiesList(int column)
+        /// <param name="sortOrder"></param>
+        private void SortList(int column, SortOrder? sortOrder = null)
         {
-            _performingBulkSelection = true;
+            // toggle the sort order if not passed as a param
+            if (sortOrder == null) {
+                sortOrder = (ListViewEntities.Sorting == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+            }
 
+            _performingBulkSelection = true;
             ListViewEntities.SuspendLayout();
 
-            if (column == int.Parse(ListViewEntities.Tag.ToString())) {
-                ListViewEntities.Sorting = ((this.ListViewEntities.Sorting == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending);
-                ListViewEntities.ListViewItemSorter = new ListViewItemComparer(column, ListViewEntities.Sorting);
-            }
-            else {
-                ListViewEntities.Tag = column;
-                ListViewEntities.ListViewItemSorter = new ListViewItemComparer(column, SortOrder.Ascending);
-            }
+            // update entities list and save the values to properties
+            ListViewEntities.Sorting = sortOrder.Value;
+
+            ListSortOrder = ListViewEntities.Sorting;
+            ListSortColumn = column;
+
+            // now apply the sorter helper 
+            ListViewEntities.ListViewItemSorter = new ListViewItemComparer(ListSortColumn, ListViewEntities.Sorting);
 
             _performingBulkSelection = false;
 

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("System", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Custom", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("System", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Custom", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntitiesListControl));
             this.ListViewEntities = new System.Windows.Forms.ListView();
             this.colDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -60,20 +60,20 @@
             this.colDescription});
             this.ListViewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListViewEntities.FullRowSelect = true;
-            listViewGroup1.Header = "System";
-            listViewGroup1.Name = "System";
-            listViewGroup1.Tag = "System";
-            listViewGroup2.Header = "Custom";
-            listViewGroup2.Name = "Custom";
-            listViewGroup2.Tag = "Custom";
+            listViewGroup3.Header = "System";
+            listViewGroup3.Name = "System";
+            listViewGroup3.Tag = "System";
+            listViewGroup4.Header = "Custom";
+            listViewGroup4.Name = "Custom";
+            listViewGroup4.Tag = "Custom";
             this.ListViewEntities.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
+            listViewGroup3,
+            listViewGroup4});
             this.ListViewEntities.HideSelection = false;
-            this.ListViewEntities.Location = new System.Drawing.Point(0, 25);
+            this.ListViewEntities.Location = new System.Drawing.Point(0, 30);
             this.ListViewEntities.MultiSelect = false;
             this.ListViewEntities.Name = "ListViewEntities";
-            this.ListViewEntities.Size = new System.Drawing.Size(840, 542);
+            this.ListViewEntities.Size = new System.Drawing.Size(840, 537);
             this.ListViewEntities.TabIndex = 1;
             this.ListViewEntities.Tag = "0";
             this.ListViewEntities.UseCompatibleStateImageBehavior = false;
@@ -115,6 +115,7 @@
             // 
             // toolStripMain
             // 
+            this.toolStripMain.AutoSize = false;
             this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolButtonLoadEntities,
             this.toolStripSeparator1,
@@ -126,7 +127,7 @@
             this.toolStripSeparator2});
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
-            this.toolStripMain.Size = new System.Drawing.Size(840, 25);
+            this.toolStripMain.Size = new System.Drawing.Size(840, 30);
             this.toolStripMain.TabIndex = 2;
             this.toolStripMain.Text = "Typescript Helper Class Utility";
             // 
@@ -135,7 +136,7 @@
             this.toolButtonLoadEntities.Image = ((System.Drawing.Image)(resources.GetObject("toolButtonLoadEntities.Image")));
             this.toolButtonLoadEntities.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolButtonLoadEntities.Name = "toolButtonLoadEntities";
-            this.toolButtonLoadEntities.Size = new System.Drawing.Size(94, 22);
+            this.toolButtonLoadEntities.Size = new System.Drawing.Size(94, 27);
             this.toolButtonLoadEntities.Text = "Load Entities";
             this.toolButtonLoadEntities.ToolTipText = "Load / Reload Entities from the server";
             this.toolButtonLoadEntities.Click += new System.EventHandler(this.ToolButtonLoadEntities_Click);
@@ -143,7 +144,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 30);
             // 
             // toolLinkCheckAll
             // 
@@ -167,7 +168,7 @@
             this.toolLinkCheckNone.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.toolLinkCheckNone.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.toolLinkCheckNone.Name = "toolLinkCheckNone";
-            this.toolLinkCheckNone.Size = new System.Drawing.Size(88, 22);
+            this.toolLinkCheckNone.Size = new System.Drawing.Size(88, 27);
             this.toolLinkCheckNone.Text = "Check None";
             this.toolLinkCheckNone.ToolTipText = "Clear the checked items in the list of Entities";
             this.toolLinkCheckNone.Click += new System.EventHandler(this.ToolLinkCheckNone_Click);
@@ -175,28 +176,28 @@
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 30);
             // 
             // toolStripLabelFilter
             // 
             this.toolStripLabelFilter.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLabelFilter.Image")));
             this.toolStripLabelFilter.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
             this.toolStripLabelFilter.Name = "toolStripLabelFilter";
-            this.toolStripLabelFilter.Size = new System.Drawing.Size(49, 22);
+            this.toolStripLabelFilter.Size = new System.Drawing.Size(49, 27);
             this.toolStripLabelFilter.Text = "Filter";
             // 
             // toolStripTextFilter
             // 
             this.toolStripTextFilter.MaxLength = 200;
             this.toolStripTextFilter.Name = "toolStripTextFilter";
-            this.toolStripTextFilter.Size = new System.Drawing.Size(110, 25);
+            this.toolStripTextFilter.Size = new System.Drawing.Size(125, 30);
             this.toolStripTextFilter.ToolTipText = "Enter a filter for the list of entities";
             this.toolStripTextFilter.TextChanged += new System.EventHandler(this.ToolStripTextFilter_TextChanged);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 30);
             // 
             // EntitiesListControl
             // 
@@ -209,7 +210,6 @@
             this.toolStripMain.ResumeLayout(false);
             this.toolStripMain.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

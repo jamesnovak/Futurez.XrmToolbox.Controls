@@ -9,6 +9,9 @@ using Microsoft.Xrm.Sdk.Metadata;
 
 namespace Futurez.XrmToolbox.Controls
 {
+    /// <summary>
+    /// Shared XrmToolbox Control that will load a list of entities into a ListView control
+    /// </summary>
     public partial class EntitiesListControl : UserControl, IXrmToolboxControl
     {
         #region Event Definitions

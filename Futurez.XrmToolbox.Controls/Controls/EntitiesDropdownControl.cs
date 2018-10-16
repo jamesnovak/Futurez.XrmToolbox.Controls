@@ -10,7 +10,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 namespace Futurez.XrmToolbox.Controls
 {
     /// <summary>
-    /// Control that will load a list of entities into a combo box
+    /// Shared XrmToolbox Control that will load a list of entities into a Dropdown control
     /// </summary>
     public partial class EntitiesDropdownControl : UserControl, IXrmToolboxControl
     {
@@ -32,7 +32,7 @@ namespace Futurez.XrmToolbox.Controls
         /// The currently selected EntityMetadata object in the ListView
         /// </summary>
         [DisplayName("Selected Entity")]
-        [Description("The Entity that is currently selected the control.")]
+        [Description("The Entity that is currently selected in the Dropdown.")]
         [Category("XrmToolbox")]
         [Browsable(false)]
         public EntityMetadata SelectedEntity { get; private set; } = null;
@@ -41,7 +41,7 @@ namespace Futurez.XrmToolbox.Controls
         /// List of all loaded EntityMetadata objects for the current connection
         /// </summary>
         [DisplayName("All Entities List")]
-        [Description("List of all Entities that have been loaded.")]
+        [Description("List of all Entities that have been loaded into the Dropdown.")]
         [Category("XrmToolbox")]
         [Browsable(false)]
         public List<EntityMetadata> AllEntities { get; private set; } = null;
@@ -59,35 +59,35 @@ namespace Futurez.XrmToolbox.Controls
         /// Event fired when Initialize() completes
         /// </summary>
         [Category("XrmToolbox")]
-        [Description("Event fired when Initialize() completes")]
+        [Description("Event fired when Initialize() of the Dropdown completes")]
         public event EventHandler InitializeComplete;
 
         /// <summary>
         /// Event that fires when <see cref="LoadData"/>() completes
         /// </summary>
         [Category("XrmToolbox")]
-        [Description("Event that fires when LoadData() completes")]
+        [Description("Event that fires when LoadData() completes for the Dropdown")]
         public event EventHandler LoadDataComplete;
 
         /// <summary>
         /// Event that fires when ClearData() completes
         /// </summary>
         [Category("XrmToolbox")]
-        [Description("Event that fires when ClearData() completes")]
+        [Description("Event that fires when ClearData() completes for the Dropdown")]
         public event EventHandler ClearDataComplete;
 
         /// <summary>
         /// Event that fires when Close() completes
         /// </summary>
         [Category("XrmToolbox")]
-        [Description("Event that fires when Close() completes")]
+        [Description("Event that fires when Close() completes for the Dropdown")]
         public event EventHandler CloseComplete;
 
         /// <summary>
         /// Event that fires when the Selected Item changes
         /// </summary>
         [Category("XrmToolbox")]
-        [Description("Event that fires when the Selected Item changes")]
+        [Description("Event that fires when the Selected Item in the Dropdown changes")]
         public event EventHandler<SelectedItemChangedEventArgs> SelectedItemChanged;
         
         /// <summary>

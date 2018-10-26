@@ -1,0 +1,462 @@
+﻿#### `EntitiesDropdownControl.EntitiesDropdownControl`
+_Summary:_ Shared XrmToolbox Control that will load a list of entities into a Dropdown control
+
+#### `EntitiesDropdownControl.#ctor()`
+_Summary:_ Constructor
+
+#### `EntitiesDropdownControl.SelectedEntity`
+_Summary:_ The currently selected EntityMetadata object in the ListView
+
+#### `EntitiesDropdownControl.AllEntities`
+_Summary:_ List of all loaded EntityMetadata objects for the current connection
+
+#### `EntitiesDropdownControl.ProgressChanged`
+_Summary:_ Event fired when the progress changes for an async event
+
+#### `EntitiesDropdownControl.InitializeComplete`
+_Summary:_ Event fired when Initialize() completes
+
+#### `EntitiesDropdownControl.LoadDataComplete`
+_Summary:_ Event that fires when () completes
+
+#### `EntitiesDropdownControl.ClearDataComplete`
+_Summary:_ Event that fires when ClearData() completes
+
+#### `EntitiesDropdownControl.CloseComplete`
+_Summary:_ Event that fires when Close() completes
+
+#### `EntitiesDropdownControl.SelectedItemChanged`
+_Summary:_ Event that fires when the Selected Item changes
+
+#### `EntitiesDropdownControl.SelectedItemChangedEventArgs`
+_Summary:_ Event Arguments for the Selected Item Changed event that provides the new Selected EntityMetadata object
+
+#### `EntitiesDropdownControl.SelectedItemChangedEventArgs.Entity`
+_Summary:_ The new Selected EntityMetadata object
+
+#### `EntitiesDropdownControl.SelectedItemChangedEventArgs.#ctor(Microsoft.Xrm.Sdk.Metadata.EntityMetadata)`
+_Summary:_ Constructor
+_Param:_ **entity** - 
+
+#### `EntitiesDropdownControl.ClearData()`
+_Summary:_ Clear all loaded data in your control
+
+#### `EntitiesDropdownControl.Close()`
+_Summary:_ Close the control and release anything that might be hanging around
+
+#### `EntitiesDropdownControl.Initialize(XrmToolBox.Extensibility.PluginControlBase,Microsoft.Xrm.Sdk.IOrganizationService)`
+_Summary:_ Initialize the control with parent and service references
+_Param:_ **parent** - 
+_Param:_ **service** - 
+
+#### `EntitiesDropdownControl.LoadData()`
+_Summary:_ Load the list of entities
+
+#### `EntitiesDropdownControl.UpdateConnection(Microsoft.Xrm.Sdk.IOrganizationService)`
+_Summary:_ Handle the updated connection
+_Param:_ **newService** - Reference to the new IOrganizationService
+
+#### `EntitiesDropdownControl.components`
+_Summary:_ Required designer variable.
+
+#### `EntitiesDropdownControl.Dispose(System.Boolean)`
+_Summary:_ Clean up any resources being used.
+_Param:_ **disposing** - true if managed resources should be disposed; otherwise, false.
+
+#### `EntitiesDropdownControl.InitializeComponent()`
+_Summary:_ Required method for Designer support - do not modify the contents of this method with the code editor.
+
+#### `IXrmToolboxControl.IXrmToolboxControl`
+_Summary:_ General interface for XrmToolbox helper controls
+
+#### `EntitiesListControl.EntitiesListControl`
+_Summary:_ Shared XrmToolbox Control that will load a list of entities into a ListView control
+
+#### `EntitiesListControl.ProgressChanged`
+_Summary:_ Event fired when the progress changes for an async event
+
+#### `EntitiesListControl.InitializeComplete`
+_Summary:_ Event fired when Initialize() completes
+
+#### `EntitiesListControl.LoadDataComplete`
+_Summary:_ Event that fires when () completes
+
+#### `EntitiesListControl.ClearDataComplete`
+_Summary:_ Event that fires when ClearData() completes
+
+#### `EntitiesListControl.CloseComplete`
+_Summary:_ Event that fires when Close() completes
+
+#### `EntitiesListControl.SelectedItemChanged`
+_Summary:_ Event that fires when the Selected Item changes
+
+#### `EntitiesListControl.CheckedItemsChanged`
+_Summary:_ Event that fires when the list of Checked Items changes
+
+#### `EntitiesListControl.FilterEntitiesListComplete`
+_Summary:_ Event that fires when FilterEntitiesList() completes
+
+#### `EntitiesListControl.SelectedItemChangedEventArgs`
+_Summary:_ Event Arguments for the Selected Item Changed event that provides the new Selected EntityMetadata object
+
+#### `EntitiesListControl.SelectedItemChangedEventArgs.Entity`
+_Summary:_ The new Selected EntityMetadata object
+
+#### `EntitiesListControl.SelectedItemChangedEventArgs.#ctor(Microsoft.Xrm.Sdk.Metadata.EntityMetadata)`
+_Summary:_ Constructor
+_Param:_ **entity** - 
+
+#### `EntitiesListControl.ColumnDisplayMode`
+_Summary:_ Display additional column details or Name and Entity Logical Name only
+
+#### `EntitiesListControl.Checkboxes`
+_Summary:_ Flag indicating whether to display Checkboxes in the ListView control
+
+#### `EntitiesListControl.EntityTypes`
+_Summary:_ Defines which Entity types should be loaded on retrieve.
+
+#### `EntitiesListControl.EntityFilters`
+_Summary:_ List of Entities to excluded upon retrieval.
+
+#### `EntitiesListControl.EntityRequestFilters`
+_Summary:_ List of EntityFilters to be applied on the
+
+#### `EntitiesListControl.RetrieveAsIfPublished`
+_Summary:_ Flag indicating whether to retrieve the metadata that has not been published
+
+#### `EntitiesListControl.GroupByType`
+_Summary:_ Flag indicating whether to group the Entities by System or Custom type
+
+#### `EntitiesListControl.DisplayToolbar`
+_Summary:_ Toggle the display of the toolbar within the control
+
+#### `EntitiesListControl.ListFilterString`
+_Summary:_ Filter string for the toolbar
+
+#### `EntitiesListControl.ListSortOrder`
+_Summary:_ Current SortOrder for the Entity List View
+
+#### `EntitiesListControl.ListSortColumn`
+_Summary:_ Current SortColumn index for the Entity List View
+
+#### `EntitiesListControl.CheckedEntities`
+_Summary:_ List of all checked EntityMetadata objects in the ListView
+
+#### `EntitiesListControl.SelectedEntity`
+_Summary:_ The currently selected EntityMetadata object in the ListView
+
+#### `EntitiesListControl.AllEntities`
+_Summary:_ List of all loaded EntityMetadata objects for the current connection
+
+#### `EntitiesListControl.#ctor()`
+_Summary:_ Constructor
+
+#### `EntitiesListControl.Initialize(XrmToolBox.Extensibility.PluginControlBase,Microsoft.Xrm.Sdk.IOrganizationService)`
+_Summary:_ Initialize the control with the parent XrmToolbox control and the active Organization Service
+_Param:_ **parent** - Reference to the containing XrmToolbox control
+_Param:_ **service** - reference to the active IOrganizationService
+_Exception:_ (T:System.InvalidOperationException) Will be thrown if the Initialize has not been called.
+
+#### `EntitiesListControl.Close()`
+_Summary:_ Close the control and release all resources
+
+#### `EntitiesListControl.ClearData()`
+_Summary:_ Clear out the saved entities list and update the ListView
+
+#### `EntitiesListControl.LoadData()`
+_Summary:_ Load the Entities using the current IOrganizationService. The call is asynchronous and will leverage the WorkAsync object on the parent XrmToolbox control
+_Exception:_ (T:System.InvalidOperationException) Will be thrown if the Initialize has not been called.
+
+#### `EntitiesListControl.UpdateConnection(Microsoft.Xrm.Sdk.IOrganizationService)`
+_Summary:_ Update the active connection and IOrganizationService reference for the control This will clear the current list of EntityMetadata objects in the ListView.
+_Param:_ **newService** - New active instance of the IOrganizationService
+
+#### `EntitiesListControl.FilterEntitiesList(System.String)`
+_Summary:_ Filter the entities list against the provided string
+
+#### `EntitiesListControl.CheckAll()`
+_Summary:_ Check all items in the ListView
+
+#### `EntitiesListControl.CheckEntities(System.Collections.Generic.List{System.String})`
+_Summary:_ Check all items in the ListView
+
+#### `EntitiesListControl.CheckNone()`
+_Summary:_ Uncheck all items in the ListView
+
+#### `EntitiesListControl.LoadEntitiesCompleteDelegate`
+_Summary:_ Event handler definition for the LoadEntitiesComplete change event
+_Param:_ **entites** - List of all loaded EntityMetadata objects
+
+#### `EntitiesListControl.LoadEntitiesComplete(System.Collections.Generic.List{Microsoft.Xrm.Sdk.Metadata.EntityMetadata})`
+_Summary:_ Method to handle the Load Data Complete event
+_Param:_ **entities** - 
+
+#### `EntitiesListControl.PopulateListView()`
+_Summary:_ Load the Entities into the list view, binding the columns based on the control properties
+
+#### `EntitiesListControl.SetUpListViewColumns()`
+_Summary:_ Set up the list view columns based on the ColumnDisplayMode and Groups options
+
+#### `EntitiesListControl.ToolStripTextFilter_TextChanged(System.Object,System.EventArgs)`
+_Summary:_ Handle the filter text changed event. Apply current filter text to the ListView
+_Param:_ **sender** - event sender object
+_Param:_ **e** - event args object
+
+#### `EntitiesListControl.ToolButtonLoadEntities_Click(System.Object,System.EventArgs)`
+_Summary:_ Hanlde the LoadEntites tool button click and load all entities from the connected instance
+_Param:_ **sender** - event sender object
+_Param:_ **e** - event args object
+
+#### `EntitiesListControl.ListViewEntities_ItemChecked(System.Object,System.Windows.Forms.ItemCheckedEventArgs)`
+_Summary:_ Handle the ListView Item Checked event and set the selected list of items
+_Param:_ **sender** - event sender object
+_Param:_ **e** - event args object
+
+#### `EntitiesListControl.ListViewEntities_ItemSelectionChanged(System.Object,System.Windows.Forms.ListViewItemSelectionChangedEventArgs)`
+_Summary:_ Handle the item selection change for the list view
+_Param:_ **sender** - 
+_Param:_ **e** - 
+
+#### `EntitiesListControl.ListViewEntities_ColumnClick(System.Object,System.Windows.Forms.ColumnClickEventArgs)`
+_Summary:_ Handle the column click for the list view
+_Param:_ **sender** - 
+_Param:_ **e** - 
+
+#### `EntitiesListControl.ListViewEntities_KeyUp(System.Object,System.Windows.Forms.KeyEventArgs)`
+_Summary:_ Handle keyboard select all / none
+_Param:_ **sender** - 
+_Param:_ **e** - 
+
+#### `EntitiesListControl.ToggleMainControlsEnabled(System.Boolean)`
+_Summary:_ Toggle main ui elements disabled while we show the results
+_Param:_ **enabled** - 
+
+#### `EntitiesListControl.SortEntitiesList(System.Int32,System.Windows.Forms.SortOrder)`
+_Summary:_ External method to allow sorting of the Entities List
+_Param:_ **sortColumn** - 
+_Param:_ **sortorder** - 
+
+#### `EntitiesListControl.SortEntitiesList()`
+_Summary:_ Sort the current list of Entities in the ListView
+
+#### `EntitiesListControl.SortList(System.Int32,System.Nullable{System.Windows.Forms.SortOrder})`
+_Summary:_ Sort the current list of Entities in the ListView
+_Param:_ **column** - ListView column index to be sorted
+_Param:_ **sortOrder** - 
+
+#### `EntitiesListControl.UpdateSelectedItemsList()`
+_Summary:_ Update the list of selected items based on the list of Checked items in the ListView
+
+#### `EntitiesListControl.CheckAllNone(System.Boolean)`
+_Summary:_ Toggle all or none checked in the main list view
+_Param:_ **checkAll** - flag indicating whether to check all items in the ListView
+
+#### `EntitiesListControl.FilterEntitiesList()`
+_Summary:_ Filter the entities list using the text in the text box.
+
+#### `EntitiesListControl.ResetGroups(System.Collections.Generic.List{System.Windows.Forms.ListViewItem})`
+_Summary:_ Reset the groups on the list view control
+_Param:_ **items** - 
+
+#### `EntitiesListControl.components`
+_Summary:_ Required designer variable.
+
+#### `EntitiesListControl.Dispose(System.Boolean)`
+_Summary:_ Clean up any resources being used.
+_Param:_ **disposing** - true if managed resources should be disposed; otherwise, false.
+
+#### `EntitiesListControl.InitializeComponent()`
+_Summary:_ Required method for Designer support - do not modify the contents of this method with the code editor.
+
+#### `EnumLoggingLevel.EnumLoggingLevel`
+_Summary:_ Logging level for general actions in the code
+
+#### `EnumEntityTypes.EnumEntityTypes`
+_Summary:_ Types of Entities that should be retrieved
+
+#### `ListViewColumnDisplayMode.ListViewColumnDisplayMode`
+_Summary:_ Display mode for the List View control
+
+#### `EnumFilterMatchType.EnumFilterMatchType`
+_Summary:_ Type of filter action to be applied for Filter Text
+
+#### `FilterInfo.FilterInfo`
+_Summary:_ Class that provides a method for capturing general filter criteria
+
+#### `FilterInfo.FilterString`
+_Summary:_ Text that will be matched on the filter
+
+#### `FilterInfo.FilterMatchType`
+_Summary:_ The type of matching that should be performed.
+
+#### `FilterInfo.ToString()`
+_Summary:_ Helper method for formatting the display of the filter criteria
+_Returns:_ 
+
+#### `ConfigurationInfo.ConfigurationInfo`
+_Summary:_ Helper class to capture general configuration settings
+
+#### `ConfigurationInfo.#ctor()`
+_Summary:_ Constructor
+
+#### `ConfigurationInfo.FilterEntity(System.String)`
+_Summary:_ Helper method that will tell whether to filter a given Entity based on its Logical Name
+_Param:_ **logicalName** - Entity Logical Name
+_Returns:_ 
+
+#### `ConfigurationInfo.FilterItem(System.String,System.Collections.Generic.List{Futurez.XrmToolbox.Controls.FilterInfo})`
+_Summary:_ Iterate through all of the filters for the specific item, return true if it matches one of the filter criteria
+_Param:_ **matchName** - Item to be matched, such as Attribute Schema Name or Entity Logical Name
+_Param:_ **filters** - Filter Info collection
+
+#### `ConfigurationInfo.EntityTypes`
+_Summary:_ Which Entity types should be loaded on retrieve.
+
+#### `ConfigurationInfo.EntityFilters`
+_Summary:_ List of filters to be applied to Entity retrieval and generation. These are Entities that you want to be excluded from the list and not generated in the template.
+
+#### `ConfigurationInfo.EntityRequestFilters`
+_Summary:_ List of EntityFilters to be applied on the
+
+#### `ConfigurationInfo.RetrieveAsIfPublished`
+_Summary:_ Flag indicating whether to retrieve the metadata that has not been published
+
+#### `ConfigurationInfo.ColumnDisplayMode`
+_Summary:_ Display additional column details or Name and Entity Logical Name only
+
+#### `ConfigurationInfo.LoggingLevel`
+_Summary:_ Toggle to enable logging while generating the templates
+
+#### `CrmActions.CrmActions`
+_Summary:_ Various helper methods for working with CRM queries, objects, etc.
+
+#### `CrmActions.RetrieveAllEntities(Microsoft.Xrm.Sdk.IOrganizationService,System.Collections.Generic.List{Microsoft.Xrm.Sdk.Metadata.EntityFilters},System.Boolean)`
+_Summary:_ Rerieve all entities with the given filter conditions
+_Param:_ **service** - 
+_Param:_ **entityFilters** - 
+_Param:_ **retrieveAsIfPublished** - 
+_Returns:_ 
+
+#### `CrmActions.RetrieveAllEntities(Microsoft.Xrm.Sdk.IOrganizationService,Futurez.XrmToolbox.Controls.ConfigurationInfo)`
+_Summary:_ Rerieve all entities with the given filter conditions
+_Param:_ **service** - 
+_Param:_ **config** - 
+_Returns:_ 
+
+#### `CrmActions.RetrieveEntity(Microsoft.Xrm.Sdk.IOrganizationService,System.String,System.Boolean)`
+_Summary:_ Retrieve an Entity Metadata and include all Entity details
+_Param:_ **service** - 
+_Param:_ **entityLogicalName** - 
+_Param:_ **retrieveAsIfPublished** - 
+_Returns:_ 
+
+#### `CrmActions.RetrieveEntity(Microsoft.Xrm.Sdk.IOrganizationService,System.String,System.Boolean,System.Collections.Generic.List{Microsoft.Xrm.Sdk.Metadata.EntityFilters})`
+_Summary:_ Retrieve an Entity Metadata and include Entity details as specified in the EntityFilters provided
+_Param:_ **service** - 
+_Param:_ **entityLogicalName** - 
+_Param:_ **retrieveAsIfPublished** - 
+_Param:_ **entityFilters** - 
+_Returns:_ 
+
+#### `CrmActions.RetrieveEntity(Microsoft.Xrm.Sdk.IOrganizationService,System.Collections.Generic.List{System.String},System.Boolean,System.Collections.Generic.List{Microsoft.Xrm.Sdk.Metadata.EntityFilters})`
+_Summary:_ Retrieve entities in a list of Entity logical names
+_Param:_ **service** - 
+_Param:_ **entityLogcialNames** - 
+_Param:_ **retrieveAsIfPublished** - 
+_Param:_ **entityFilters** - 
+_Returns:_ 
+
+#### `CrmActions.CreateEntityKey(Microsoft.Xrm.Sdk.IOrganizationService,System.String,System.String,System.String,System.Collections.Generic.List{System.String})`
+_Summary:_ 
+_Param:_ **service** - 
+_Param:_ **entityLogicalName** - 
+_Param:_ **logicalName** - 
+_Param:_ **keyDisplayName** - 
+_Param:_ **keyAttributes** - 
+
+#### `CrmActions.ReactivateEntityKey(Microsoft.Xrm.Sdk.IOrganizationService,Microsoft.Xrm.Sdk.Metadata.EntityKeyMetadata)`
+_Summary:_ Reactivate an Entity Key
+_Param:_ **service** - 
+_Param:_ **key** - 
+_Returns:_ 
+
+#### `CrmActions.ReactivateEntityKey(Microsoft.Xrm.Sdk.IOrganizationService,System.Collections.Generic.List{Microsoft.Xrm.Sdk.Metadata.EntityKeyMetadata})`
+_Summary:_ Reactivate a batch of Entity Alternate Keys
+_Param:_ **service** - 
+_Param:_ **keys** - 
+_Returns:_ 
+
+#### `CrmActions.RetrieveEntityKey(Microsoft.Xrm.Sdk.IOrganizationService,Futurez.XrmToolbox.Controls.ConfigurationInfo,Microsoft.Xrm.Sdk.Metadata.EntityMetadata,System.Boolean)`
+_Summary:_ Retrieve an Entity Key Metadata record
+_Param:_ **service** - 
+_Param:_ **config** - 
+_Param:_ **entity** - 
+_Param:_ **retrieveAsIfPublished** - 
+_Returns:_ 
+
+#### `CrmActions.DeleteEntityKey(Microsoft.Xrm.Sdk.IOrganizationService,Microsoft.Xrm.Sdk.Metadata.EntityKeyMetadata)`
+_Summary:_ Delete a selected Entity Alternate Key
+_Param:_ **service** - 
+_Param:_ **key** - 
+
+#### `CrmActions.DeleteEntityKey(Microsoft.Xrm.Sdk.IOrganizationService,System.Collections.Generic.List{Microsoft.Xrm.Sdk.Metadata.EntityKeyMetadata})`
+_Summary:_ Delete a list of Alternate Keys
+_Param:_ **service** - 
+_Param:_ **keys** - 
+
+#### `CrmActions.RetrieveEntityAttributes(Microsoft.Xrm.Sdk.IOrganizationService,System.String,System.Boolean)`
+_Summary:_ Retrieve all attributes for an Entity
+_Param:_ **service** - 
+_Param:_ **entityLogicalName** - 
+_Param:_ **retrieveAsIfPublished** - 
+_Returns:_ 
+
+#### `CrmActions.RetrieveEntityAttributes(Microsoft.Xrm.Sdk.IOrganizationService,System.String)`
+_Summary:_ Retrieve all attributes for an Entity
+_Param:_ **service** - 
+_Param:_ **entityLogicalName** - 
+_Returns:_ 
+
+#### `CrmActions.RetrievePublishers(Microsoft.Xrm.Sdk.IOrganizationService)`
+_Summary:_ Rtrieve a list of Publishers with some common attributes
+_Param:_ **service** - 
+_Returns:_ 
+
+#### `CrmActions.RetrieveSolutions(Microsoft.Xrm.Sdk.IOrganizationService)`
+_Summary:_ Retrieve a list of Solutions with some common attributes
+_Param:_ **service** - 
+_Returns:_ 
+
+#### `CrmActions.GetLocalizedLabel(Microsoft.Xrm.Sdk.Label,System.String)`
+_Summary:_ Helper method to get the first label in the list of LocalizedLabels
+_Param:_ **label** - Label object containing Localized Labels
+_Param:_ **valueIfNull** - If the Localizd Labels are null, use this value instead
+_Returns:_ 
+
+#### `OpenFileNameEditor.OpenFileNameEditor`
+_Summary:_ Helper class that will display the Open File Dialog in the Property Grid thanks to: https://stackoverflow.com/questions/1858960/how-can-i-get-a-propertygrid-to-show-a-savefiledialog
+
+#### `OpenFileNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext)`
+_Summary:_ Specify the Edit Style for the Property
+_Param:_ **context** - 
+_Returns:_ 
+
+#### `OpenFileNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext,System.IServiceProvider,System.Object)`
+_Summary:_ Override for the EditValue method for the Property control
+_Param:_ **context** - 
+_Param:_ **provider** - 
+_Param:_ **value** - 
+_Returns:_ 
+
+
+#### `ListViewItemComparer.ListViewItemComparer`
+_Summary:_ ListView Item Compare taken from XrmToolbox: https://github.com/MscrmTools/XrmToolBox/blob/master/Plugins/MsCrmTools.MetadataDocumentGenerator/Helper/ListViewItemComparer.cs
+
+#### `Properties.Resources`
+_Summary:_ A strongly-typed resource class, for looking up localized strings, etc.
+
+#### `Properties.Resources.ResourceManager`
+_Summary:_ Returns the cached ResourceManager instance used by this class.
+
+#### `Properties.Resources.Culture`
+_Summary:_ Overrides the current thread's CurrentUICulture property for all resource lookups using this strongly typed resource class.

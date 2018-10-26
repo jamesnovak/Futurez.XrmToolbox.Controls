@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Futurez.XrmToolbox.Controls</RootNamespace>
     <AssemblyName>Futurez.XrmToolbox.Controls</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -143,7 +143,7 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)" "%25DEVTOOL%25\CRM Tools\XrmToolBox\Plugins\" /Y
 xcopy "$(TargetDir)$(TargetName).pdb" "%25DEVTOOL%25\CRM Tools\XrmToolBox\Plugins\" /Y
-xcopy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)NuGet\Package\lib\net47\Plugins\" /Y
+xcopy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\NuGet\Package\lib\net47\" /Y
 
 if $(ConfigurationName) == Debug (
   IF NOT EXIST Plugins mkdir Plugins

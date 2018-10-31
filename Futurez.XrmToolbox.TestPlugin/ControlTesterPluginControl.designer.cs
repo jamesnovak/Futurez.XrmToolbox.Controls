@@ -36,13 +36,16 @@ namespace Futurez.XrmToolbox.Controls
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.EntitiesListControl = new Futurez.XrmToolbox.Controls.EntitiesListControl();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
             this.labelMessage = new System.Windows.Forms.Label();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.checkBoxGridProps = new System.Windows.Forms.CheckBox();
-            this.EntitiesListControl = new Futurez.XrmToolbox.Controls.EntitiesListControl();
+            this.propertyGridDetails = new System.Windows.Forms.PropertyGrid();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.radioButtonShowEntList = new System.Windows.Forms.RadioButton();
+            this.radioButtonShowEntity = new System.Windows.Forms.RadioButton();
             this.toolStripMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripMenu
@@ -90,8 +93,8 @@ namespace Futurez.XrmToolbox.Controls
             this.tableLayoutPanel1.Controls.Add(this.EntitiesListControl, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.textBoxEventLog, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.labelMessage, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.propertyGrid1, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxGridProps, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.propertyGridDetails, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 31);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -101,6 +104,28 @@ namespace Futurez.XrmToolbox.Controls
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(987, 538);
             this.tableLayoutPanel1.TabIndex = 6;
+            // 
+            // EntitiesListControl
+            // 
+            this.EntitiesListControl.Checkboxes = true;
+            this.EntitiesListControl.ColumnDisplayMode = Futurez.XrmToolbox.Controls.ListViewColumnDisplayMode.Compact;
+            this.EntitiesListControl.DisplayToolbar = false;
+            this.EntitiesListControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EntitiesListControl.EntityTypes = Futurez.XrmToolbox.Controls.EnumEntityTypes.BothCustomAndSystem;
+            this.EntitiesListControl.GroupByType = true;
+            this.EntitiesListControl.Location = new System.Drawing.Point(3, 33);
+            this.EntitiesListControl.Name = "EntitiesListControl";
+            this.EntitiesListControl.Padding = new System.Windows.Forms.Padding(3);
+            this.EntitiesListControl.RetrieveAsIfPublished = true;
+            this.EntitiesListControl.Size = new System.Drawing.Size(487, 482);
+            this.EntitiesListControl.TabIndex = 12;
+            this.EntitiesListControl.ProgressChanged += new System.EventHandler<System.ComponentModel.ProgressChangedEventArgs>(this.EntitiesListControl1_ProgressChanged);
+            this.EntitiesListControl.InitializeComplete += new System.EventHandler(this.EntitiesListControl1_InitializeComplete);
+            this.EntitiesListControl.LoadDataComplete += new System.EventHandler(this.EntitiesListControl1_LoadDataComplete);
+            this.EntitiesListControl.ClearDataComplete += new System.EventHandler(this.EntitiesListControl1_ClearDataComplete);
+            this.EntitiesListControl.CloseComplete += new System.EventHandler(this.EntitiesListControl1_CloseComplete);
+            this.EntitiesListControl.SelectedItemChanged += new System.EventHandler<Futurez.XrmToolbox.Controls.EntitiesListControl.SelectedItemChangedEventArgs>(this.EntitiesListControl1_SelectedItemChanged);
+            this.EntitiesListControl.CheckedItemsChanged += new System.EventHandler(this.EntitiesListControl1_CheckedItemsChanged);
             // 
             // textBoxEventLog
             // 
@@ -125,48 +150,49 @@ namespace Futurez.XrmToolbox.Controls
             this.labelMessage.Text = " ↓  This is an Entity List View Control!   ↓";
             this.labelMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // propertyGrid1
+            // propertyGridDetails
             // 
-            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGrid1.Location = new System.Drawing.Point(496, 33);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.tableLayoutPanel1.SetRowSpan(this.propertyGrid1, 2);
-            this.propertyGrid1.Size = new System.Drawing.Size(240, 502);
-            this.propertyGrid1.TabIndex = 8;
+            this.propertyGridDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGridDetails.Location = new System.Drawing.Point(496, 33);
+            this.propertyGridDetails.Name = "propertyGridDetails";
+            this.tableLayoutPanel1.SetRowSpan(this.propertyGridDetails, 2);
+            this.propertyGridDetails.Size = new System.Drawing.Size(240, 502);
+            this.propertyGridDetails.TabIndex = 8;
             // 
-            // checkBoxGridProps
+            // flowLayoutPanel1
             // 
-            this.checkBoxGridProps.AutoSize = true;
-            this.checkBoxGridProps.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxGridProps.Location = new System.Drawing.Point(496, 3);
-            this.checkBoxGridProps.Name = "checkBoxGridProps";
-            this.checkBoxGridProps.Size = new System.Drawing.Size(240, 24);
-            this.checkBoxGridProps.TabIndex = 13;
-            this.checkBoxGridProps.Text = "Show Entities List Properties";
-            this.checkBoxGridProps.UseVisualStyleBackColor = true;
-            this.checkBoxGridProps.CheckedChanged += new System.EventHandler(this.checkBoxGridProps_CheckedChanged);
+            this.flowLayoutPanel1.Controls.Add(this.radioButtonShowEntList);
+            this.flowLayoutPanel1.Controls.Add(this.radioButtonShowEntity);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(496, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(240, 24);
+            this.flowLayoutPanel1.TabIndex = 13;
             // 
-            // EntitiesListControl
+            // radioButtonShowEntList
             // 
-            this.EntitiesListControl.Checkboxes = true;
-            this.EntitiesListControl.ColumnDisplayMode = Futurez.XrmToolbox.Controls.ListViewColumnDisplayMode.Compact;
-            this.EntitiesListControl.DisplayToolbar = false;
-            this.EntitiesListControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EntitiesListControl.EntityTypes = Futurez.XrmToolbox.Controls.EnumEntityTypes.BothCustomAndSystem;
-            this.EntitiesListControl.GroupByType = true;
-            this.EntitiesListControl.Location = new System.Drawing.Point(3, 33);
-            this.EntitiesListControl.Name = "EntitiesListControl";
-            this.EntitiesListControl.Padding = new System.Windows.Forms.Padding(3);
-            this.EntitiesListControl.RetrieveAsIfPublished = true;
-            this.EntitiesListControl.Size = new System.Drawing.Size(487, 482);
-            this.EntitiesListControl.TabIndex = 12;
-            this.EntitiesListControl.ProgressChanged += new System.EventHandler<System.ComponentModel.ProgressChangedEventArgs>(this.EntitiesListControl1_ProgressChanged);
-            this.EntitiesListControl.InitializeComplete += new System.EventHandler(this.EntitiesListControl1_InitializeComplete);
-            this.EntitiesListControl.LoadDataComplete += new System.EventHandler(this.EntitiesListControl1_LoadDataComplete);
-            this.EntitiesListControl.ClearDataComplete += new System.EventHandler(this.EntitiesListControl1_ClearDataComplete);
-            this.EntitiesListControl.CloseComplete += new System.EventHandler(this.EntitiesListControl1_CloseComplete);
-            this.EntitiesListControl.SelectedItemChanged += new System.EventHandler<Futurez.XrmToolbox.Controls.EntitiesListControl.SelectedItemChangedEventArgs>(this.EntitiesListControl1_SelectedItemChanged);
-            this.EntitiesListControl.CheckedItemsChanged += new System.EventHandler(this.EntitiesListControl1_CheckedItemsChanged);
+            this.radioButtonShowEntList.AutoSize = true;
+            this.radioButtonShowEntList.Checked = true;
+            this.radioButtonShowEntList.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonShowEntList.Name = "radioButtonShowEntList";
+            this.radioButtonShowEntList.Size = new System.Drawing.Size(132, 17);
+            this.radioButtonShowEntList.TabIndex = 3;
+            this.radioButtonShowEntList.TabStop = true;
+            this.radioButtonShowEntList.Text = "Entity List View Control";
+            this.radioButtonShowEntList.UseVisualStyleBackColor = true;
+            this.radioButtonShowEntList.CheckedChanged += new System.EventHandler(this.radioButtonShowEntList_CheckedChanged);
+            // 
+            // radioButtonShowEntity
+            // 
+            this.radioButtonShowEntity.AutoSize = true;
+            this.radioButtonShowEntity.Location = new System.Drawing.Point(141, 3);
+            this.radioButtonShowEntity.Name = "radioButtonShowEntity";
+            this.radioButtonShowEntity.Size = new System.Drawing.Size(96, 17);
+            this.radioButtonShowEntity.TabIndex = 2;
+            this.radioButtonShowEntity.TabStop = true;
+            this.radioButtonShowEntity.Text = "Selected Entity";
+            this.radioButtonShowEntity.UseVisualStyleBackColor = true;
+            this.radioButtonShowEntity.CheckedChanged += new System.EventHandler(this.radioButtonShowEntity_CheckedChanged);
             // 
             // ControlTesterPluginControl
             // 
@@ -181,6 +207,8 @@ namespace Futurez.XrmToolbox.Controls
             this.toolStripMenu.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -193,9 +221,11 @@ namespace Futurez.XrmToolbox.Controls
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TextBox textBoxEventLog;
-        private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.PropertyGrid propertyGridDetails;
         private System.Windows.Forms.Label labelMessage;
         private EntitiesListControl EntitiesListControl;
-        private System.Windows.Forms.CheckBox checkBoxGridProps;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.RadioButton radioButtonShowEntList;
+        private System.Windows.Forms.RadioButton radioButtonShowEntity;
     }
 }

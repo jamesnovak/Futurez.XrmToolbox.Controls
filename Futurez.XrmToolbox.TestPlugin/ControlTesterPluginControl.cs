@@ -10,18 +10,19 @@ namespace Futurez.XrmToolbox.Controls
 {
     public partial class ControlTesterPluginControl : PluginControlBase
     {
- 
-        public ControlTesterPluginControl()
+         public ControlTesterPluginControl()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// On Load of the plugin control, perform some initialization of the Controls 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MyPluginControl_Load(object sender, EventArgs e)
         {
             ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("https://github.com/MscrmTools/XrmToolBox"));
-
-            // try and load before initialize. should blow up!
-            // EntitiesListControl.LoadData();
 
             // initialize the user control with the connection and parent reference
             EntitiesListControl.Initialize(this, Service);
@@ -32,10 +33,13 @@ namespace Futurez.XrmToolbox.Controls
                         FilterString = "futz_"
                     });
 
-            EntitiesListControl.EntityRequestFilters.Add(EntityFilters.All);
-            checkBoxGridProps.Checked = true;
+            EntitiesListControl.DisplayToolbar = true;
 
-            // propertyGrid1.SelectedObject = EntitiesListControl.EntityFilters;
+            // add the entity filter that will return Attribute metadata
+            EntitiesListControl.EntityRequestFilters.Add(EntityFilters.Attributes);
+
+            // set up the properties detail
+            SetPropertySelectedObject();
 
             // automatically load the data?
             if (MessageBox.Show("Would you like to automatically load the Entities?", "Load Entities", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -116,20 +120,24 @@ namespace Futurez.XrmToolbox.Controls
         }
         #endregion
 
-        private void checkBoxGridProps_CheckedChanged(object sender, EventArgs e)
+        private void SetPropertySelectedObject() {
+            if (radioButtonShowEntList.Checked) {
+                propertyGridDetails.SelectedObject = EntitiesListControl;
+            }
+            else {
+                var entRef = EntitiesListControl.SelectedEntity as EntityMetadata;
+                propertyGridDetails.SelectedObject = entRef;
+            }
+        }
+
+        private void radioButtonShowEntList_CheckedChanged(object sender, EventArgs e)
         {
             SetPropertySelectedObject();
         }
 
-        private void SetPropertySelectedObject() {
-            if (checkBoxGridProps.Checked) {
-                propertyGrid1.SelectedObject = EntitiesListControl;
-            }
-            else {
-
-                var entRef = EntitiesListControl.SelectedEntity as EntityMetadata;
-                propertyGrid1.SelectedObject = entRef;
-            }
+        private void radioButtonShowEntity_CheckedChanged(object sender, EventArgs e)
+        {
+            SetPropertySelectedObject();
         }
     }
 }

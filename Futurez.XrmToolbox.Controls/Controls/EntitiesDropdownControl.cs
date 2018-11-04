@@ -20,14 +20,43 @@ namespace Futurez.XrmToolbox.Controls
         public EntitiesDropdownControl()
         {
             InitializeComponent();
+
+            // handle the enabled changed event
+            EnabledChanged += EntitiesDropdownControl_EnabledChanged;
+
+            ToggleMainControlsEnabled();
+        }
+
+        /// <summary>
+        /// Handle the Enabled property change to ensure that the child controls are also disabled
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EntitiesDropdownControl_EnabledChanged(object sender, EventArgs e)
+        {
+            ToggleMainControlsEnabled();
         }
 
         #region Private properties
         private PluginControlBase _parent = null;
         private IOrganizationService _service = null;
+
+        private bool _autoLoadData = false;
+
         #endregion
 
         #region Public Properties
+        /// <summary>
+        /// Flag indicating whether to automatically load data when the Service connection is set or updated.
+        /// </summary>
+        [DisplayName("Automatically LoadData")]
+        [Description("Flag indicating whether to automatically load data when the Service connection is set or updated.")]
+        [Category("XrmToolbox")]
+        public bool AutoLoadData
+        {
+            get { return _autoLoadData; }
+            set { _autoLoadData = value; }
+        }
         /// <summary>
         /// The currently selected EntityMetadata object in the ListView
         /// </summary>
@@ -45,6 +74,18 @@ namespace Futurez.XrmToolbox.Controls
         [Category("XrmToolbox")]
         [Browsable(false)]
         public List<EntityMetadata> AllEntities { get; private set; } = null;
+
+        [DisplayName("Organization Service")]
+        [Description("Refefrence to the IOrganizationService context.")]
+        [Category("XrmToolbox")]
+        [Browsable(false)]
+        public IOrganizationService Service { get => _service; set => UpdateConnection(value); }
+
+        [DisplayName("Parent PluginBase Control")]
+        [Description("Refefrence to the parent XrmToolBox Plugin Base Control.")]
+        [Category("XrmToolbox")]
+        public PluginControlBase ParentBaseControl { get => _parent; set => _parent = value; }
+
         #endregion
 
         #region Event Definitions
@@ -89,7 +130,15 @@ namespace Futurez.XrmToolbox.Controls
         [Category("XrmToolbox")]
         [Description("Event that fires when the Selected Item in the Dropdown changes")]
         public event EventHandler<SelectedItemChangedEventArgs> SelectedItemChanged;
-        
+
+        [Category("XrmToolbox")]
+        [Description("Event that fires when the Connection Update completes")]
+        public event EventHandler UpdateConnectionComplete;
+
+        [Category("XrmToolbox")]
+        [Description("Event that fires when an Exception occours")]
+        public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+
         /// <summary>
         /// Event Arguments for the Selected Item Changed event that provides the new Selected EntityMetadata object
         /// </summary>
@@ -114,13 +163,18 @@ namespace Futurez.XrmToolbox.Controls
         #region Public properties
         #endregion
 
+        #region Public methods
         /// <summary>
         /// Clear all loaded data in your control
         /// </summary>
         public void ClearData()
         {
+            SelectedEntity = null;
+            SelectedItemChanged?.Invoke(this, new SelectedItemChangedEventArgs(null));
+
             comboEntities.DataSource = null;
             comboEntities.Items.Clear();
+
             ClearDataComplete?.Invoke(this, new EventArgs());
         }
 
@@ -144,52 +198,46 @@ namespace Futurez.XrmToolbox.Controls
         /// <param name="service"></param>
         public void Initialize(PluginControlBase parent, IOrganizationService service)
         {
-            if ((service == null) || (parent == null)) {
-                throw new InvalidOperationException("Both parent and service must be provided.");
-            }
-
             AllEntities = new List<EntityMetadata>();
-            SelectedEntity = null;
 
             // set up some vars
             _parent = parent;
             _service = service;
 
-            ClearData();
-
             InitializeComplete?.Invoke(this, new EventArgs());
         }
 
-        private class ComboItem
-        {
-            internal ComboItem(string name, string value, EntityMetadata entityMeta)
-            {
-                _name = name;
-                _value = value;
-                _entityMeta = entityMeta;
-                if (name != value) {
-                    _displayname = $"{_name} ({_value})";
-                }
-                else {
-                    _displayname = name;
-                }
-            }
-            private string _name;
-            private string _displayname;
-            private string _value;
-            private EntityMetadata _entityMeta;
-
-            public string Name { get => _name; set => _name = value; }
-            public string DisplayName { get => _displayname; set => _displayname = value; }
-            public string Value { get => _value; set => _value = value; }
-            internal EntityMetadata EntityMeta { get => _entityMeta; set => _entityMeta = value; }
-        }
-
         /// <summary>
-        /// Load the list of entities
+        /// Load the Entities using the current IOrganizationService.
+        /// The call is asynchronous and will leverage the WorkAsync object on the parent XrmToolbox control
         /// </summary>
         public void LoadData()
         {
+            LoadData(true);
+        }
+
+        /// <summary>
+        /// Private method that will rethrow an Exception if specified in the parameter.  
+        /// This is meant to allow for external programmatic calls to load vs those from the built in controls
+        /// </summary>
+        /// <param name="throwException">Flag indicating whether to rethrow a captured exception</param>
+        private void LoadData(bool throwException)
+        {
+            if ((_service == null) || (_parent == null))
+            {
+                var ex = new InvalidOperationException("Both the Service and Parent references must be set before loading the Entities list");
+
+                // raise the error event and if set, throw error
+                ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(ex.Message, ex));
+
+                if (throwException) {
+                    throw ex;
+                }
+                return;
+            }
+
+            ToggleMainControlsEnabled(false);
+
             ClearData();
 
             _parent.WorkAsync(new WorkAsyncInfo {
@@ -207,25 +255,87 @@ namespace Futurez.XrmToolbox.Controls
 
                         w.ReportProgress(100, "Loading Entities from CRM Complete!");
                     }
-                    catch (Exception ex) {
-                        MessageBox.Show("An error occured attetmpting to load the list of Entities:\n" + ex.Message);
+                    catch (System.ServiceModel.FaultException ex)
+                    {
+                        e.Result = ex;
                     }
                 },
                 ProgressChanged = e => {
                     ProgressChanged?.Invoke(this, new ProgressChangedEventArgs(e.ProgressPercentage, e.UserState.ToString()));
                 },
                 PostWorkCallBack = e => {
-                    var entities = (List<EntityMetadata>)e.Result;
+                    if (e.Result is Exception)
+                    {
+                        RaiseErrorMessage($"An error occured attetmpting to load the list of Entities", (Exception)e.Result);
 
-                    LoadDataComplete?.Invoke(this,new EventArgs());
+                        if (throwException) {
+                            throw (Exception)e.Result;
+                        }
+                    }
+                    else
+                    {
+                        var entities = (List<EntityMetadata>)e.Result;
 
-                    AllEntities = entities;
+                        LoadDataComplete?.Invoke(this, new EventArgs());
 
-                    LoadComboItems();
+                        AllEntities = entities;
+
+                        LoadComboItems();
+                    }
                 }
             });
         }
 
+        /// <summary>
+        /// Handle the updated connection 
+        /// </summary>
+        /// <param name="newService">Reference to the new IOrganizationService</param>
+        public void UpdateConnection(IOrganizationService newService)
+        {
+            // if the service had previously been set, then clear things out
+            if (_service != null) {
+                ClearData();
+            }
+
+            _service = newService;
+
+            // if the auto load is set, now is the time to reload!
+            if (_autoLoadData)
+            {
+                LoadData(true);
+            }
+
+            ToggleMainControlsEnabled();
+
+            UpdateConnectionComplete?.Invoke(this, new EventArgs());
+        }
+        #endregion
+
+        #region Private helper methods
+
+        /// <summary>
+        /// Toggle the main display based on the status of the overall Enbabled state or whether the service has been set
+        /// </summary>
+        private void ToggleMainControlsEnabled() {
+
+            var enabled = (Enabled) ? _service != null : Enabled;
+
+            ToggleMainControlsEnabled(enabled);
+        }
+
+        /// <summary>
+        /// Toggle main ui elements disabled while we show the results
+        /// </summary>
+        /// <param name="enabled"></param>
+        private void ToggleMainControlsEnabled(bool enabled)
+        {
+            buttonReload.Enabled = enabled;
+            comboEntities.Enabled = enabled;
+        }
+
+        /// <summary>
+        /// Load the list of Entities into the Combo control
+        /// </summary>
         private void LoadComboItems()
         {
             comboEntities.SuspendLayout();
@@ -235,42 +345,79 @@ namespace Futurez.XrmToolbox.Controls
             var items = from ent in AllEntities
                         select new ComboItem(CrmActions.GetLocalizedLabel(ent.DisplayName, ent.SchemaName), ent.SchemaName, ent);
 
-            comboEntities.DataSource = items.OrderBy(e=> e.DisplayName).ToList();
+            comboEntities.DataSource = items.OrderBy(e => e.DisplayName).ToList();
             comboEntities.DisplayMember = "DisplayName";
             comboEntities.ValueMember = "Value";
 
-            if (comboEntities.Items.Count > 0) {
+            if (comboEntities.Items.Count > 0)
+            {
                 comboEntities.SelectedIndex = 0;
             }
 
             comboEntities.ResumeLayout();
+
+            ToggleMainControlsEnabled(true);
         }
+
 
         /// <summary>
-        /// Handle the updated connection 
+        /// Helper method to raise the ErrorOccured event to the client
         /// </summary>
-        /// <param name="newService">Reference to the new IOrganizationService</param>
-        public void UpdateConnection(IOrganizationService newService)
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        private void RaiseErrorMessage(string message, Exception ex)
         {
-            _service = newService;
-
-            ClearData();
+            ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(message, ex));
         }
+
+        #endregion
+
+
+        #region Control event handlers
 
         private void ComboEntities_SelectedIndexChanged(object sender, EventArgs e)
         {
             SelectedEntity = null;
 
-            if (comboEntities.SelectedItem is ComboItem item) {
+            if (comboEntities.SelectedItem is ComboItem item)
+            {
                 SelectedEntity = item.EntityMeta;
             }
-            
+
             SelectedItemChanged?.Invoke(this, new SelectedItemChangedEventArgs(SelectedEntity));
         }
 
         private void ButtonReload_Click(object sender, EventArgs e)
         {
-            LoadData();
+            LoadData(false);
         }
+        #endregion
+
+        private class ComboItem
+        {
+            internal ComboItem(string name, string value, EntityMetadata entityMeta)
+            {
+                _name = name;
+                _value = value;
+                _entityMeta = entityMeta;
+                if (name != value) {
+                    _displayname = $"{_name} ({_value})";
+                }
+                else {
+                    _displayname = name;
+                }
+            }
+
+            private string _name;
+            private string _displayname;
+            private string _value;
+            private EntityMetadata _entityMeta;
+
+            public string Name { get => _name; set => _name = value; }
+            public string DisplayName { get => _displayname; set => _displayname = value; }
+            public string Value { get => _value; set => _value = value; }
+            internal EntityMetadata EntityMeta { get => _entityMeta; set => _entityMeta = value; }
+        }
+
     }
 }

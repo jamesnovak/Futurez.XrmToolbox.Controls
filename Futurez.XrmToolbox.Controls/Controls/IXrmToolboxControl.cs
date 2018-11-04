@@ -16,6 +16,11 @@ namespace Futurez.XrmToolbox.Controls
         event EventHandler<ProgressChangedEventArgs> ProgressChanged;
         event EventHandler ClearDataComplete;
         event EventHandler CloseComplete;
+        event EventHandler UpdateConnectionComplete;
+        event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+
+        IOrganizationService Service { get; set; }
+        PluginControlBase ParentBaseControl { get; set; }
 
         void Initialize(PluginControlBase parent, IOrganizationService Service);
 
@@ -26,5 +31,16 @@ namespace Futurez.XrmToolbox.Controls
         void Close();
 
         void UpdateConnection(IOrganizationService newService);
+    }
+
+    public class ErrorOccurredEventArgs : EventArgs
+    {
+        public readonly string ErrorMessage = null;
+        public readonly Exception Exception = null;
+        public ErrorOccurredEventArgs(string errorMessage, Exception ex)
+        {
+            ErrorMessage = errorMessage;
+            Exception = ex;
+        }
     }
 }

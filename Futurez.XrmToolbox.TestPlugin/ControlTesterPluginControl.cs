@@ -22,10 +22,15 @@ namespace Futurez.XrmToolbox.Controls
         /// <param name="e"></param>
         private void MyPluginControl_Load(object sender, EventArgs e)
         {
-            ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("https://github.com/MscrmTools/XrmToolBox"));
+            //ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("https://github.com/MscrmTools/XrmToolBox"));
 
             // initialize the user control with the connection and parent reference
-            EntitiesListControl.Initialize(this, Service);
+            // EntitiesListControl.Initialize(this, Service);
+
+            EntitiesListControl.ParentBaseControl = this;
+            EntitiesListControl.Service = Service;
+
+            EntitiesListControl.ErrorOccurred += EntitiesListControl_ErrorOccurred;
 
             // apply some Entity Filters.  Do not load entities from the futz_ publisher.
             EntitiesListControl.EntityFilters.Add(new FilterInfo() {
@@ -36,16 +41,31 @@ namespace Futurez.XrmToolbox.Controls
             EntitiesListControl.DisplayToolbar = true;
 
             // add the entity filter that will return Attribute metadata
-            EntitiesListControl.EntityRequestFilters.Add(EntityFilters.Attributes);
+            // EntitiesListControl.EntityRequestFilters.Add(EntityFilters.Attributes);
 
             // set up the properties detail
             SetPropertySelectedObject();
+            entitiesDropdownControl1.ParentBaseControl = this;
+            entitiesDropdownControl1.Service = Service;
+
+            if (Service == null)
+                return;
 
             // automatically load the data?
             if (MessageBox.Show("Would you like to automatically load the Entities?", "Load Entities", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 EntitiesListControl.LoadData();
             }
+        }
+
+        private void EntitiesListControl_ErrorOccurred(object sender, ErrorOccurredEventArgs e)
+        {
+            var msg = $"{e.ErrorMessage}";
+
+            if ((e.Exception != null)) {
+                msg += $": {e.Exception.Message}";
+            }
+            ShowErrorNotification(msg, null);
         }
 
         private void tsbClose_Click(object sender, EventArgs e)
@@ -73,6 +93,7 @@ namespace Futurez.XrmToolbox.Controls
 
             // ENTITIES LIST - update the connection 
             EntitiesListControl.UpdateConnection(newService);
+            entitiesDropdownControl1.UpdateConnection(newService);
         }
 
         #region Child control event handlers
@@ -138,6 +159,11 @@ namespace Futurez.XrmToolbox.Controls
         private void radioButtonShowEntity_CheckedChanged(object sender, EventArgs e)
         {
             SetPropertySelectedObject();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            EntitiesListControl.LoadData();
         }
     }
 }

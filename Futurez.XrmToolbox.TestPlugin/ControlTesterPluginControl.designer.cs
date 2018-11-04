@@ -43,6 +43,7 @@ namespace Futurez.XrmToolbox.Controls
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.radioButtonShowEntList = new System.Windows.Forms.RadioButton();
             this.radioButtonShowEntity = new System.Windows.Forms.RadioButton();
+            this.entitiesDropdownControl1 = new Futurez.XrmToolbox.Controls.EntitiesDropdownControl();
             this.toolStripMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -57,7 +58,8 @@ namespace Futurez.XrmToolbox.Controls
             this.toolStripButton1});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(987, 31);
+            this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripMenu.Size = new System.Drawing.Size(2047, 37);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -65,23 +67,24 @@ namespace Futurez.XrmToolbox.Controls
             // 
             this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(86, 28);
+            this.tsbClose.Size = new System.Drawing.Size(148, 34);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
             // tssSeparator1
             // 
             this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 31);
+            this.tssSeparator1.Size = new System.Drawing.Size(6, 37);
             // 
             // toolStripButton1
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(28, 28);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(112, 34);
+            this.toolStripButton1.Text = "Load Data";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -95,29 +98,35 @@ namespace Futurez.XrmToolbox.Controls
             this.tableLayoutPanel1.Controls.Add(this.labelMessage, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.propertyGridDetails, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.entitiesDropdownControl1, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 31);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 37);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(987, 538);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(2047, 1120);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // EntitiesListControl
             // 
+            this.EntitiesListControl.AutoLoadData = false;
             this.EntitiesListControl.Checkboxes = true;
             this.EntitiesListControl.ColumnDisplayMode = Futurez.XrmToolbox.Controls.ListViewColumnDisplayMode.Compact;
-            this.EntitiesListControl.DisplayToolbar = false;
+            this.EntitiesListControl.DisplayToolbar = true;
             this.EntitiesListControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EntitiesListControl.EntityTypes = Futurez.XrmToolbox.Controls.EnumEntityTypes.BothCustomAndSystem;
             this.EntitiesListControl.GroupByType = true;
-            this.EntitiesListControl.Location = new System.Drawing.Point(3, 33);
+            this.EntitiesListControl.Location = new System.Drawing.Point(11, 66);
+            this.EntitiesListControl.Margin = new System.Windows.Forms.Padding(11);
             this.EntitiesListControl.Name = "EntitiesListControl";
-            this.EntitiesListControl.Padding = new System.Windows.Forms.Padding(3);
+            this.EntitiesListControl.Padding = new System.Windows.Forms.Padding(6);
+            this.EntitiesListControl.ParentBaseControl = null;
             this.EntitiesListControl.RetrieveAsIfPublished = true;
-            this.EntitiesListControl.Size = new System.Drawing.Size(487, 482);
+            this.EntitiesListControl.Service = null;
+            this.EntitiesListControl.Size = new System.Drawing.Size(1001, 965);
             this.EntitiesListControl.TabIndex = 12;
             this.EntitiesListControl.ProgressChanged += new System.EventHandler<System.ComponentModel.ProgressChangedEventArgs>(this.EntitiesListControl1_ProgressChanged);
             this.EntitiesListControl.InitializeComplete += new System.EventHandler(this.EntitiesListControl1_InitializeComplete);
@@ -131,11 +140,12 @@ namespace Futurez.XrmToolbox.Controls
             // 
             this.textBoxEventLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxEventLog.Enabled = false;
-            this.textBoxEventLog.Location = new System.Drawing.Point(742, 3);
+            this.textBoxEventLog.Location = new System.Drawing.Point(1540, 6);
+            this.textBoxEventLog.Margin = new System.Windows.Forms.Padding(6);
             this.textBoxEventLog.Multiline = true;
             this.textBoxEventLog.Name = "textBoxEventLog";
             this.tableLayoutPanel1.SetRowSpan(this.textBoxEventLog, 2);
-            this.textBoxEventLog.Size = new System.Drawing.Size(242, 512);
+            this.textBoxEventLog.Size = new System.Drawing.Size(501, 1030);
             this.textBoxEventLog.TabIndex = 7;
             // 
             // labelMessage
@@ -143,9 +153,10 @@ namespace Futurez.XrmToolbox.Controls
             this.labelMessage.BackColor = System.Drawing.SystemColors.Info;
             this.labelMessage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelMessage.Location = new System.Drawing.Point(3, 0);
+            this.labelMessage.Location = new System.Drawing.Point(6, 0);
+            this.labelMessage.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelMessage.Name = "labelMessage";
-            this.labelMessage.Size = new System.Drawing.Size(487, 30);
+            this.labelMessage.Size = new System.Drawing.Size(1011, 55);
             this.labelMessage.TabIndex = 10;
             this.labelMessage.Text = " ↓  This is an Entity List View Control!   ↓";
             this.labelMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -153,10 +164,11 @@ namespace Futurez.XrmToolbox.Controls
             // propertyGridDetails
             // 
             this.propertyGridDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGridDetails.Location = new System.Drawing.Point(496, 33);
+            this.propertyGridDetails.Location = new System.Drawing.Point(1029, 61);
+            this.propertyGridDetails.Margin = new System.Windows.Forms.Padding(6);
             this.propertyGridDetails.Name = "propertyGridDetails";
             this.tableLayoutPanel1.SetRowSpan(this.propertyGridDetails, 2);
-            this.propertyGridDetails.Size = new System.Drawing.Size(240, 502);
+            this.propertyGridDetails.Size = new System.Drawing.Size(499, 1053);
             this.propertyGridDetails.TabIndex = 8;
             // 
             // flowLayoutPanel1
@@ -164,18 +176,20 @@ namespace Futurez.XrmToolbox.Controls
             this.flowLayoutPanel1.Controls.Add(this.radioButtonShowEntList);
             this.flowLayoutPanel1.Controls.Add(this.radioButtonShowEntity);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(496, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(1029, 6);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(6);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(240, 24);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(499, 43);
             this.flowLayoutPanel1.TabIndex = 13;
             // 
             // radioButtonShowEntList
             // 
             this.radioButtonShowEntList.AutoSize = true;
             this.radioButtonShowEntList.Checked = true;
-            this.radioButtonShowEntList.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonShowEntList.Location = new System.Drawing.Point(6, 6);
+            this.radioButtonShowEntList.Margin = new System.Windows.Forms.Padding(6);
             this.radioButtonShowEntList.Name = "radioButtonShowEntList";
-            this.radioButtonShowEntList.Size = new System.Drawing.Size(132, 17);
+            this.radioButtonShowEntList.Size = new System.Drawing.Size(236, 29);
             this.radioButtonShowEntList.TabIndex = 3;
             this.radioButtonShowEntList.TabStop = true;
             this.radioButtonShowEntList.Text = "Entity List View Control";
@@ -185,23 +199,37 @@ namespace Futurez.XrmToolbox.Controls
             // radioButtonShowEntity
             // 
             this.radioButtonShowEntity.AutoSize = true;
-            this.radioButtonShowEntity.Location = new System.Drawing.Point(141, 3);
+            this.radioButtonShowEntity.Location = new System.Drawing.Point(254, 6);
+            this.radioButtonShowEntity.Margin = new System.Windows.Forms.Padding(6);
             this.radioButtonShowEntity.Name = "radioButtonShowEntity";
-            this.radioButtonShowEntity.Size = new System.Drawing.Size(96, 17);
+            this.radioButtonShowEntity.Size = new System.Drawing.Size(167, 29);
             this.radioButtonShowEntity.TabIndex = 2;
             this.radioButtonShowEntity.TabStop = true;
             this.radioButtonShowEntity.Text = "Selected Entity";
             this.radioButtonShowEntity.UseVisualStyleBackColor = true;
             this.radioButtonShowEntity.CheckedChanged += new System.EventHandler(this.radioButtonShowEntity_CheckedChanged);
             // 
+            // entitiesDropdownControl1
+            // 
+            this.entitiesDropdownControl1.AutoLoadData = false;
+            this.entitiesDropdownControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.entitiesDropdownControl1.Location = new System.Drawing.Point(6, 1048);
+            this.entitiesDropdownControl1.Margin = new System.Windows.Forms.Padding(6);
+            this.entitiesDropdownControl1.Name = "entitiesDropdownControl1";
+            this.entitiesDropdownControl1.ParentBaseControl = null;
+            this.entitiesDropdownControl1.Service = null;
+            this.entitiesDropdownControl1.Size = new System.Drawing.Size(1011, 66);
+            this.entitiesDropdownControl1.TabIndex = 14;
+            // 
             // ControlTesterPluginControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolStripMenu);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "ControlTesterPluginControl";
-            this.Size = new System.Drawing.Size(987, 569);
+            this.Size = new System.Drawing.Size(2047, 1157);
             this.Load += new System.EventHandler(this.MyPluginControl_Load);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
@@ -227,5 +255,6 @@ namespace Futurez.XrmToolbox.Controls
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.RadioButton radioButtonShowEntList;
         private System.Windows.Forms.RadioButton radioButtonShowEntity;
+        private EntitiesDropdownControl entitiesDropdownControl1;
     }
 }

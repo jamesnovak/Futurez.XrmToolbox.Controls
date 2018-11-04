@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("System", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Custom", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("System", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Custom", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntitiesListControl));
             this.ListViewEntities = new System.Windows.Forms.ListView();
             this.colDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -60,21 +60,21 @@
             this.colDescription});
             this.ListViewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListViewEntities.FullRowSelect = true;
-            listViewGroup3.Header = "System";
-            listViewGroup3.Name = "System";
-            listViewGroup3.Tag = "System";
-            listViewGroup4.Header = "Custom";
-            listViewGroup4.Name = "Custom";
-            listViewGroup4.Tag = "Custom";
+            listViewGroup1.Header = "System";
+            listViewGroup1.Name = "System";
+            listViewGroup1.Tag = "System";
+            listViewGroup2.Header = "Custom";
+            listViewGroup2.Name = "Custom";
+            listViewGroup2.Tag = "Custom";
             this.ListViewEntities.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
+            listViewGroup1,
+            listViewGroup2});
             this.ListViewEntities.HideSelection = false;
             this.ListViewEntities.Location = new System.Drawing.Point(0, 30);
             this.ListViewEntities.MultiSelect = false;
             this.ListViewEntities.Name = "ListViewEntities";
             this.ListViewEntities.Size = new System.Drawing.Size(840, 537);
-            this.ListViewEntities.TabIndex = 1;
+            this.ListViewEntities.TabIndex = 3;
             this.ListViewEntities.Tag = "0";
             this.ListViewEntities.UseCompatibleStateImageBehavior = false;
             this.ListViewEntities.View = System.Windows.Forms.View.Details;
@@ -128,7 +128,7 @@
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
             this.toolStripMain.Size = new System.Drawing.Size(840, 30);
-            this.toolStripMain.TabIndex = 2;
+            this.toolStripMain.TabIndex = 4;
             this.toolStripMain.Text = "Typescript Helper Class Utility";
             // 
             // toolButtonLoadEntities

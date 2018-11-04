@@ -71,6 +71,14 @@ namespace Futurez.XrmToolbox.Controls
         [Description("Event that fires when the list of Checked Items changes")]
         public event EventHandler FilterEntitiesListComplete;
 
+        [Category("XrmToolbox")]
+        [Description("Event that fires when the Connection Update completes")]
+        public event EventHandler UpdateConnectionComplete;
+
+        [Category("XrmToolbox")]
+        [Description("Event that fires when an Exception occours")]
+        public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+
         /// <summary>
         /// Event Arguments for the Selected Item Changed event that provides the new Selected EntityMetadata object
         /// </summary>
@@ -266,6 +274,17 @@ namespace Futurez.XrmToolbox.Controls
         #endregion
 
         #region Runtime Properties
+        /// <summary>
+        /// Flag indicating whether to automatically load data when the Service connection is set or updated.
+        /// </summary>
+        [DisplayName("Automatically LoadData")]
+        [Description("Flag indicating whether to automatically load data when the Service connection is set or updated.")]
+        [Category("XrmToolbox")]
+        public bool AutoLoadData
+        {
+            get { return _autoLoadData; }
+            set { _autoLoadData = value; }
+        }
 
         /// <summary>
         /// List of all checked EntityMetadata objects in the ListView
@@ -293,6 +312,18 @@ namespace Futurez.XrmToolbox.Controls
         [Category("XrmToolbox")]
         [Browsable(false)]
         public List<EntityMetadata> AllEntities { get; private set; } = null;
+
+        [DisplayName("Organization Service")]
+        [Description("Refefrence to the IOrganizationService context.")]
+        [Category("XrmToolbox")]
+        [Browsable(false)]
+        public IOrganizationService Service { get => _service; set => UpdateConnection(value); }
+
+        [DisplayName("Parent PluginBase Control")]
+        [Description("Refefrence to the parent XrmToolBox Plugin Base Control.")]
+        [Category("XrmToolbox")]
+        public PluginControlBase ParentBaseControl { get => _parent; set => _parent = value; }
+
         #endregion
         #endregion
 
@@ -301,6 +332,8 @@ namespace Futurez.XrmToolbox.Controls
         private IOrganizationService _service = null;
         private List<ListViewItem> _entitiesListViewItemsColl = null;
         private bool _performingBulkSelection = false; // let's keep the listview from flickering and crashing
+
+        private bool _autoLoadData = false;
 
         private bool _groupByType = true;
         private ConfigurationInfo _config = null;
@@ -315,10 +348,14 @@ namespace Futurez.XrmToolbox.Controls
 
             // set up some default values and uI state
             _config = new ConfigurationInfo();
-            ToggleMainControlsEnabled(false);
-        }
-        #region Public methods
 
+            // handle the enabled changed event
+            EnabledChanged += EntitiesListControl_EnabledChanged;
+
+            ToggleMainControlsEnabled();
+        }
+
+        #region Public methods
 
         #region IXrmToolboxControl
 
@@ -330,15 +367,12 @@ namespace Futurez.XrmToolbox.Controls
         /// <exception cref="InvalidOperationException">Will be thrown if the Initialize has not been called.</exception>
         public void Initialize(PluginControlBase parent, IOrganizationService service)
         {
-            if ((service == null) || (parent == null)) {
-                throw new InvalidOperationException("Both parent and service must be provided.");
-            }
-
             // set up some vars
             _parent = parent;
             _service = service;
 
-            ClearData();
+            CheckedEntities = new List<EntityMetadata>();
+            AllEntities = new List<EntityMetadata>();
 
             // only enalbe stuff if the connection is made 
             ToggleMainControlsEnabled(_service != null);
@@ -378,11 +412,29 @@ namespace Futurez.XrmToolbox.Controls
         /// Load the Entities using the current IOrganizationService.
         /// The call is asynchronous and will leverage the WorkAsync object on the parent XrmToolbox control
         /// </summary>
-        /// <exception cref="InvalidOperationException">Will be thrown if the Initialize has not been called.</exception>
         public void LoadData()
         {
-            if ((_service == null) || (_parent == null)) {
-                throw new InvalidOperationException("Initialize must be called before loading the list of Entities.");
+            LoadData(true);
+        }
+
+        /// <summary>
+        /// Private method that will rethrow an Exception if specified in the parameter.  
+        /// This is meant to allow for external programmatic calls to load vs those from the built in controls
+        /// </summary>
+        /// <param name="throwException">Flag indicating whether to rethrow a captured exception</param>
+        private void LoadData(bool throwException)
+        {
+            if ((_service == null) || (_parent == null))
+            {
+                var ex = new InvalidOperationException("Both the Service and Parent references must be set before loading the Entities list");
+
+                // raise the error event and if set, throw error
+                ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(ex.Message, ex));
+
+                if (throwException) {
+                    throw ex;
+                }
+                return;
             }
 
             ToggleMainControlsEnabled(false);
@@ -406,18 +458,31 @@ namespace Futurez.XrmToolbox.Controls
 
                         w.ReportProgress(100, "Loading Entities from CRM Complete!");
                     }
-                    catch (Exception ex) {
-                        MessageBox.Show("An error occured attetmpting to load the list of Entities:\n" + ex.Message);
+                    catch (System.ServiceModel.FaultException ex) {
+                        e.Result = ex;
                     }
                 },
                 ProgressChanged = e => {
                     ProgressChanged?.Invoke(this, new ProgressChangedEventArgs(e.ProgressPercentage, e.UserState.ToString()));
                 },
                 PostWorkCallBack = e => {
-                    // launch the results window... get off this worker thread so we can work with the dialog correctly
-                    BeginInvoke(new LoadEntitiesCompleteDelegate(LoadEntitiesComplete), new object[] { e.Result as List<EntityMetadata> });
+
+                    if (e.Result is Exception) {
+                        RaiseErrorMessage($"An error occured attetmpting to load the list of Entities", (Exception)e.Result);
+
+                        if (throwException) {
+                            throw (Exception)e.Result;
+                        }
+                    }
+                    else {
+                        LoadEntitiesComplete((List<EntityMetadata>)e.Result);
+                    }
                 }
             });
+        }
+
+        private void RaiseErrorMessage(string message, Exception ex) {
+            ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(message, ex));
         }
 
         /// <summary>
@@ -427,11 +492,21 @@ namespace Futurez.XrmToolbox.Controls
         /// <param name="newService">New active instance of the IOrganizationService</param>
         public void UpdateConnection(IOrganizationService newService)
         {
+            // if the service had previously been set, then clear things out
+            if (_service != null) {
+                ClearData();
+            }
+
             _service = newService;
 
-            ClearData();
+            ToggleMainControlsEnabled();
 
-            ToggleMainControlsEnabled(_service != null);
+            // if the auto load is set, now is the time to reload!
+            if (_autoLoadData) {
+                LoadData(true);
+            }
+
+            UpdateConnectionComplete?.Invoke(this, new EventArgs());
         }
 
         #endregion
@@ -491,12 +566,6 @@ namespace Futurez.XrmToolbox.Controls
         #endregion
 
         #region Events
-        /// <summary>
-        /// Event handler definition for the LoadEntitiesComplete change event
-        /// </summary>
-        /// <param name="entites">List of all loaded EntityMetadata objects</param>
-        private delegate void LoadEntitiesCompleteDelegate(List<EntityMetadata> entites);
-
         /// <summary>
         /// Method to handle the Load Data Complete event
         /// </summary>
@@ -633,6 +702,15 @@ namespace Futurez.XrmToolbox.Controls
         #endregion
 
         #region UI event handlers
+        /// <summary>
+        /// Handle the Enabled property change to ensure that the child controls are also disabled
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EntitiesListControl_EnabledChanged(object sender, EventArgs e)
+        {
+            ToggleMainControlsEnabled();
+        }
 
         /// <summary>
         /// Handle the filter text changed event.  Apply current filter text to the ListView
@@ -651,7 +729,7 @@ namespace Futurez.XrmToolbox.Controls
         /// <param name="e">event args object</param>
         private void ToolButtonLoadEntities_Click(object sender, EventArgs e)
         {
-            LoadData();
+            LoadData(false);
         }
 
         /// <summary>
@@ -727,6 +805,14 @@ namespace Futurez.XrmToolbox.Controls
         #endregion
 
         #region Private helper methods
+        /// <summary>
+        /// Toggle the main display based on the status of the overall Enbabled state or whether the service has been set
+        /// </summary>
+        private void ToggleMainControlsEnabled()
+        {
+            var enabled = (Enabled) ? _service != null : Enabled;
+            ToggleMainControlsEnabled(enabled);
+        }
 
         /// <summary>
         /// Toggle main ui elements disabled while we show the results
